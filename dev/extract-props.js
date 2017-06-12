@@ -1,7 +1,8 @@
 "use strict";
 
 const all   = require('./all-properties');
-const props = require('../../src/properties');
+// requires mlproj-core to be cloned next to mlproj-web
+const props = require('../../mlproj-core/src/properties');
 
 function className(obj)
 {
