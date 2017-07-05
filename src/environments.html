@@ -58,7 +58,6 @@
               <li><a href="#import">Imports</a></li>
               <li><a href="#databases">Databases</a></li>
               <li><a href="#servers">Servers</a></li>
-              <li><a href="#supported">Supported properties</a></li>
             </ul>
             <p>
               You can find examples of environment files in
@@ -69,11 +68,12 @@
               environment files.)
             </p>
             <blockquote>
-              This is far from covering all aspects and all possible properties of
-              databases, forests and servers.  It is a work in progress.  The goal is to
-              support all properties supported by the Management API of MarkLogic.  If you
-              need one that is not supported yet, make sure to open an issue about it, so
-              it moves to the top of the list.
+              This is not covering all aspects and all possible properties of databases,
+              forests and servers.  It is still work in progress.  The goal is to support
+              all properties supported by the Management API of MarkLogic.  If you need
+              one that is not supported yet, make sure to open an issue about it, so it
+	      moves to the top of the list.  Look at the <a href="properties">property</a>
+              list, with a detailed support status.
             </blockquote>
             <p></p>
 
@@ -92,15 +92,15 @@
               the environment "prod" is in <code>xproject/mlenvs/prod.json</code>.
             </p>
             <p>
-              Some commands need an environment to operate upon (e.g. <code>deploy</code>)
+              Most commands need an environment to operate upon (e.g. <code>deploy</code>)
               whilst other do not (e.g. <code>new</code>.)  There are 3 ways of specifying
               the environment for a command to use:
             </p>
             <ul>
               <li>using the default environment
                 in <code>xproject/mlenvs/default.json</code>; typically this one only
-                imports another one, is not checked in your source revision control, so
-                everyone can set a different default environment</li>
+                imports another one, and is not checked in your source revision control,
+                so everyone can set a different default environment</li>
               <li>pass an environment by name, using the option <code>-e</code>; its value
                 is used to construct a file
                 name: <code>xproject/mlenvs/{name}.json</code></li>
@@ -120,8 +120,8 @@
         "format": "0.1",
         "import": "base.json",
         "code":   "awesome-app",
-        "title":  "Short title for the project",
-        "desc":   "Longer description of the project.  You can use **Markdown**.",
+        "title":  "Short title for the environment",
+        "desc":   "Longer description of the environment.  You can use **Markdown**.",
         "srcdir": "...",
         "connect": {
             "host":     "...",
@@ -150,10 +150,10 @@
                 used to refer to the project, and to build component names in a consistent
                 way (for databases, forests and servers).</li>
               <li><code>title</code> - The title is a short, human-friendly description of
-                the project. It can use Markdown notation (the notation used in
+                the environment. It can use Markdown notation (the notation used in
                 Github).</li>
               <li><code>desc</code> - The description is a longer description of the
-                project than the title. It can use Markdown notation.</li>
+                environment than the title. It can use Markdown notation.</li>
               <li><code>srcdir</code> - The source directory is the path to the directory
                   with the sources of the project. This property is generally set
                   automatically, when used in a standard <code>XProject</code> structure,
@@ -253,6 +253,7 @@
     "mlproj": {
         "format": "0.1",
         "import": "base.json",
+        "title":  "The local environment for development",
         "connect": {
             "host":     "localhost",
             "user":     "admin",
@@ -277,7 +278,7 @@
     "mlproj": {
         "format": "0.1",
         "code":   "my-app",
-        "title":  "My project",
+        "title":  "The base environment config",
         "params": {
             "port": 8080,
             "root": "/"
@@ -307,7 +308,7 @@
     "mlproj": {
         "format": "0.1",
         "code":   "my-app",
-        "title":  "My project",
+        "title":  "The local environment for development",
         "connect": {
             "host":     "localhost",
             "user":     "admin",
@@ -344,126 +345,24 @@
             <h3>Databases</h3>
             <p>
               The property <code>databases</code> is an array of databases.  Each database
-              is an object that looks like the following:
+              has a name, and might have an ID.  It contains all the properties you want
+              to set when creating the database.
             </p>
-            <pre>
-{
-    "id":   "...",
-    "name": "...",
-    "forests": [
-        "..."
-    ],
-    "schema": {
-        <em>(database object or ref)</em>
-    },
-    "security": {
-        <em>(database object or ref)</em>
-    },
-    "triggers": {
-        <em>(database object or ref)</em>
-    },
-    "indexes": {
-        "ranges": [{
-            "type":      "string",
-            "name":      "ape",
-            "positions": false,
-            "invalid":   "ignore"
-        }, {
-            "type":      "string",
-            "name":      [ "bear", "cat" ],
-            "positions": false,
-            "invalid":   "ignore"
-        }]
-    },
-    "searches": {
-        <em>(infos on searches)</em>
-    },
-    "lexicons": {
-        "uri": false,
-        "collection": true
-    }
-}</pre>
+            <h4>Database details</h4>
             <p>
-              The <code>id</code> is a unique ID used only in the environment files, to
-              refer to databases (e.g. from a server, to be its modules database).
-              The <code>name</code> is the name of the database, as it will be set on
-              MarkLogic.
-            </p>
-            <p>
-              <code>forests</code> describes the forests attached to the database.  If it
-              is an array, its values must be strings, used as names for the forests.  It
-              can also by a number (must be a positive integer then, including zero),
-              which gives the number of forests to attach to the database.  The forest
-              names are then derived from the database name, by appending
-              <code>-001</code>, <code>-002</code>, etc.
-            </p>
-            <p>
-              <code>schema</code>, <code>security</code> and <code>triggers</code> are
-              resp. the database's Schema DB, Security DB and Triggers DB.  As always,
-              they can be either ID or name reference to an existing database description,
-              or be a full, embedded database object.
-            </p>
-            <h4>Range indexes</h4>
-            <p>
-              Range indexes can be set in the <code>ranges</code> array.  Each is an
-              object with the following properties (if there is <code>path</code> it is a
-              path range index, if there is <code>parent</code> it is an attribute range
-              index, and if not it is an element range index):
-            </p>
-            <ul>
-              <li><code>type</code> - the scalar type of the range index
-                (<code>int</code>, <code>string</code>...)</li>
-              <li><code>positions</code> - a boolean, whether to save or not the range
-                value positions</li>
-              <li><code>invalid</code>: what to do in case of invalid values:
-                <code>reject</code> or <code>ignore</code></li>
-              <li><code>colation</code>: the collation to use for the range index</li>
-              <li><code>name</code>: the local name of the element or attribute (only for
-                element and attribute range indexes)</li>
-              <li><code>namespace</code>: the namespace URI of the element or attribute
-                (only for element and attribute range indexes)</li>
-              <li><code>parent.name</code>: the local name of the parent element of the
-                attribute (only for attribute range indexes)</li>
-              <li><code>parent.namespace</code>: the namespace URI of the parent element
-                of the attribute (only for attribute range indexes)</li>
-              <li><code>path</code>: the path expression to use (only for path range
-                indexes)</li>
-            </ul>
-            <h4>Searches</h4>
-            <p>
-              The property <code>searches</code> is an object that contains information,
-              options, and switches about searches.  For now it contains only the fast
-              searches switches:
-            </p>
-            <pre>
-"searches": {
-    "fast": {
-        "case-sensitive"            : true,
-        "diacritic-sensitive"       : false,
-        "element-character"         : false,
-        "element-phrase"            : true,
-        "element-trailing-wildcard" : true,
-        "element-word"              : false,
-        "phrase"                    : false,
-        "reverse"                   : true
-    }
-}</pre>
-            <p>
-              Each property in <code>fast</code> corresponds to the property
-              <code>fast-{name}-searches</code> in the Management API.  For instance,
-              <code>case-sensitive</code> corresponds to
-              <code>fast-case-sensitive-searches</code>.
-            </p>
-            <h4>Lexicons</h4>
-            <p>
-              <code>lexicons.uri</code> and <code>lexicons.collection</code> set whether
-              to maintain resp. a URI or a collection lexicon for that database.
+              As the database object definition is the most complex one, it is maintained
+              on its own <a href="databases">documentation page</a>.
             </p>
             <h4>Database references</h4>
             <p>
-              Anywhere a database object is expected (to give a database its schema,
-              security or triggers database, or a server its content or modules database),
-              you can instead use a database reference.  A database reference is an object
+              In addition to the global array of databases, there are a few places in an
+              environment file expecting a database object (namely, to set the content or
+              modules database of a server, or to set the schema, security or triggers
+              database of another database).
+            </p>
+            <p>
+              In those place, you can either put a full database object definition, or
+              rather use a <em>database reference</em>.  A database reference is an object
               containing only one property: <code>idref</code> to point to a database by
               ID, or <code>nameref</code> to point to a database by name:
             </p>
@@ -547,206 +446,13 @@
     "sgml-character-entities"     : "none",
     "standalone"                  : "omit",
     "undeclare-prefixes"          : "default",
-    "version"                     : "2.0",
+    "version"                     : "2.0"
 }</pre>
             <p>
               Each property corresponds to the property <code>output-{name}</code> in the
               Management API.  For instance, <code>doctype-public</code> corresponds to
               <code>putput-doctype-public</code>.
             </p>
-
-            <a class="anchor" id="supported"></a>
-            <h3>Supported properties</h3>
-            <p>
-              All properties from the Management API are not supported yet to be
-              represented in the environment files.  Here are the lists of the supported
-              properties, for resp. databases and servers.
-            </p>
-            <p>
-              These lists help identifying what is left to do on the environment file
-              format design, giving a good idea of what is the coverage of the file
-              format, and mapping between property names and paths in the file format.
-              They are based on the Management API in MarkLogic 9.0 EA4.
-            </p>
-            <p>
-              Each entry contains the name of the property as in the Management API, and
-              if it is supported a path-like notation of where it can be set in the
-              environment file format.
-            </p>
-
-
-<h4>Database properties</h4>
-<p>Supported properties for databases.</p>
-<table class="table">
-<thead>
-<tr><th>name</th><th>path</th></tr>
-</thead>
-<tbody>
-<tr><td>assignment-policy</td><td>✗</td></tr>
-<tr><td>attribute-value-positions</td><td>✗</td></tr>
-<tr><td>collection-lexicon</td><td>lexicons.collection</td></tr>
-<tr><td>data-encryption</td><td>✗</td></tr>
-<tr><td>database-name</td><td>name</td></tr>
-<tr><td>database-replication</td><td>✗</td></tr>
-<tr><td>directory-creation</td><td>✗</td></tr>
-<tr><td>element-value-positions</td><td>✗</td></tr>
-<tr><td>element-word-positions</td><td>✗</td></tr>
-<tr><td>element-word-query-through</td><td>✗</td></tr>
-<tr><td>enabled</td><td>✗</td></tr>
-<tr><td>encryption-key-id</td><td>✗</td></tr>
-<tr><td>expunge-locks</td><td>✗</td></tr>
-<tr><td>fast-case-sensitive-searches</td><td>searches.fast.case-sensitive</td></tr>
-<tr><td>fast-diacritic-sensitive-searches</td><td>searches.fast.diacritic-sensitive</td></tr>
-<tr><td>fast-element-character-searches</td><td>searches.fast.element-character</td></tr>
-<tr><td>fast-element-phrase-searches</td><td>searches.fast.element-phrase</td></tr>
-<tr><td>fast-element-trailing-wildcard-searches</td><td>searches.fast.element-trailing-wildcard</td></tr>
-<tr><td>fast-element-word-searches</td><td>searches.fast.element-word</td></tr>
-<tr><td>fast-phrase-searches</td><td>searches.fast.phrase</td></tr>
-<tr><td>fast-reverse-searches</td><td>searches.fast.reverse</td></tr>
-<tr><td>field</td><td>✗</td></tr>
-<tr><td>field-value-positions</td><td>✗</td></tr>
-<tr><td>field-value-searches</td><td>✗</td></tr>
-<tr><td>forest</td><td>forests</td></tr>
-<tr><td>format-compatibility</td><td>✗</td></tr>
-<tr><td>in-memory-geospatial-region-index-size</td><td>✗</td></tr>
-<tr><td>in-memory-limit</td><td>✗</td></tr>
-<tr><td>in-memory-list-size</td><td>✗</td></tr>
-<tr><td>in-memory-range-index-size</td><td>✗</td></tr>
-<tr><td>in-memory-reverse-index-size</td><td>✗</td></tr>
-<tr><td>in-memory-tree-size</td><td>✗</td></tr>
-<tr><td>in-memory-triple-index-size</td><td>✗</td></tr>
-<tr><td>index-detection</td><td>✗</td></tr>
-<tr><td>inherit-collections</td><td>✗</td></tr>
-<tr><td>inherit-permissions</td><td>✗</td></tr>
-<tr><td>inherit-quality</td><td>✗</td></tr>
-<tr><td>journal-count</td><td>✗</td></tr>
-<tr><td>journal-size</td><td>✗</td></tr>
-<tr><td>journaling</td><td>✗</td></tr>
-<tr><td>language</td><td>✗</td></tr>
-<tr><td>large-size-threshold</td><td>✗</td></tr>
-<tr><td>locking</td><td>✗</td></tr>
-<tr><td>maintain-directory-last-modified</td><td>✗</td></tr>
-<tr><td>maintain-last-modified</td><td>✗</td></tr>
-<tr><td>merge-max-size</td><td>✗</td></tr>
-<tr><td>merge-min-ratio</td><td>✗</td></tr>
-<tr><td>merge-min-size</td><td>✗</td></tr>
-<tr><td>merge-priority</td><td>✗</td></tr>
-<tr><td>merge-timestamp</td><td>✗</td></tr>
-<tr><td>one-character-searches</td><td>✗</td></tr>
-<tr><td>phrase-around</td><td>✗</td></tr>
-<tr><td>phrase-through</td><td>✗</td></tr>
-<tr><td>positions-list-max-size</td><td>✗</td></tr>
-<tr><td>preallocate-journals</td><td>✗</td></tr>
-<tr><td>preload-mapped-data</td><td>✗</td></tr>
-<tr><td>preload-replica-mapped-data</td><td>✗</td></tr>
-<tr><td>range-element-attribute-index</td><td>indexes.ranges[]</td></tr>
-<tr><td>range-element-index</td><td>indexes.ranges[]</td></tr>
-<tr><td>range-index-optimize</td><td>✗</td></tr>
-<tr><td>range-path-index</td><td>indexes.ranges[]</td></tr>
-<tr><td>rebalancer-enable</td><td>✗</td></tr>
-<tr><td>rebalancer-throttle</td><td>✗</td></tr>
-<tr><td>reindexer-enable</td><td>✗</td></tr>
-<tr><td>reindexer-throttle</td><td>✗</td></tr>
-<tr><td>reindexer-timestamp</td><td>✗</td></tr>
-<tr><td>retain-until-backup</td><td>✗</td></tr>
-<tr><td>retired-forest-count</td><td>✗</td></tr>
-<tr><td>schema-database</td><td>schema</td></tr>
-<tr><td>security-database</td><td>security</td></tr>
-<tr><td>stemmed-searches</td><td>✗</td></tr>
-<tr><td>tf-normalization</td><td>✗</td></tr>
-<tr><td>three-character-searches</td><td>✗</td></tr>
-<tr><td>three-character-word-positions</td><td>✗</td></tr>
-<tr><td>trailing-wildcard-searches</td><td>✗</td></tr>
-<tr><td>trailing-wildcard-word-positions</td><td>✗</td></tr>
-<tr><td>triggers-database</td><td>triggers</td></tr>
-<tr><td>triple-index</td><td>✗</td></tr>
-<tr><td>triple-positions</td><td>✗</td></tr>
-<tr><td>two-character-searches</td><td>✗</td></tr>
-<tr><td>uri-lexicon</td><td>lexicons.uri</td></tr>
-<tr><td>word-positions</td><td>✗</td></tr>
-<tr><td>word-searches</td><td>✗</td></tr>
-</tbody>
-</table>
-<h4>Server properties</h4>
-<p>Supported properties for servers.</p>
-<table class="table">
-<thead>
-<tr><th>name</th><th>path</th></tr>
-</thead>
-<tbody>
-<tr><td>address</td><td>✗</td></tr>
-<tr><td>authentication</td><td>✗</td></tr>
-<tr><td>backlog</td><td>✗</td></tr>
-<tr><td>collation</td><td>✗</td></tr>
-<tr><td>compute-content-length</td><td>✗</td></tr>
-<tr><td>concurrent-request-limit</td><td>✗</td></tr>
-<tr><td>content-database</td><td>✗</td></tr>
-<tr><td>coordinate-system</td><td>✗</td></tr>
-<tr><td>debug-allow</td><td>✗</td></tr>
-<tr><td>default-error-format</td><td>✗</td></tr>
-<tr><td>default-inference-size</td><td>✗</td></tr>
-<tr><td>default-time-limit</td><td>✗</td></tr>
-<tr><td>default-user</td><td>✗</td></tr>
-<tr><td>default-xquery-version</td><td>✗</td></tr>
-<tr><td>display-last-login</td><td>✗</td></tr>
-<tr><td>distribute-timestamps</td><td>✗</td></tr>
-<tr><td>enabled</td><td>✗</td></tr>
-<tr><td>error-handler</td><td>handler</td></tr>
-<tr><td>execute</td><td>✗</td></tr>
-<tr><td>file-log-level</td><td>✗</td></tr>
-<tr><td>group-name</td><td>✗</td></tr>
-<tr><td>internal-security</td><td>✗</td></tr>
-<tr><td>keep-alive-timeout</td><td>✗</td></tr>
-<tr><td>log-errors</td><td>✗</td></tr>
-<tr><td>max-inference-size</td><td>✗</td></tr>
-<tr><td>max-time-limit</td><td>✗</td></tr>
-<tr><td>multi-version-concurrency-control</td><td>✗</td></tr>
-<tr><td>output-byte-order-mark</td><td>output.byte-order-mark</td></tr>
-<tr><td>output-cdata-section-localname</td><td>output.cdata-section-localname</td></tr>
-<tr><td>output-cdata-section-namespace-uri</td><td>output.cdata-section-namespace-uri</td></tr>
-<tr><td>output-doctype-public</td><td>output.doctype-public</td></tr>
-<tr><td>output-doctype-system</td><td>output.doctype-system</td></tr>
-<tr><td>output-encoding</td><td>output.encoding</td></tr>
-<tr><td>output-escape-uri-attributes</td><td>output.escape-uri-attributes</td></tr>
-<tr><td>output-include-content-type</td><td>output.include-content-type</td></tr>
-<tr><td>output-include-default-attributes</td><td>output.include-default-attributes</td></tr>
-<tr><td>output-indent</td><td>output.indent</td></tr>
-<tr><td>output-indent-tabs</td><td>output.indent-tabs</td></tr>
-<tr><td>output-indent-untyped</td><td>output.indent-untyped</td></tr>
-<tr><td>output-media-type</td><td>output.media-type</td></tr>
-<tr><td>output-method</td><td>output.method</td></tr>
-<tr><td>output-normalization-form</td><td>output.normalization-form</td></tr>
-<tr><td>output-omit-xml-declaration</td><td>output.omit-xml-declaration</td></tr>
-<tr><td>output-sgml-character-entities</td><td>output.sgml-character-entities</td></tr>
-<tr><td>output-standalone</td><td>output.standalone</td></tr>
-<tr><td>output-undeclare-prefixes</td><td>output.undeclare-prefixes</td></tr>
-<tr><td>output-version</td><td>output.version</td></tr>
-<tr><td>port</td><td>port</td></tr>
-<tr><td>pre-commit-trigger-depth</td><td>✗</td></tr>
-<tr><td>pre-commit-trigger-limit</td><td>✗</td></tr>
-<tr><td>profile-allow</td><td>✗</td></tr>
-<tr><td>request-timeout</td><td>✗</td></tr>
-<tr><td>rewrite-resolves-globally</td><td>✗</td></tr>
-<tr><td>root</td><td>root</td></tr>
-<tr><td>server-name</td><td>name</td></tr>
-<tr><td>server-type</td><td>type</td></tr>
-<tr><td>session-timeout</td><td>✗</td></tr>
-<tr><td>ssl-allow-sslv3</td><td>✗</td></tr>
-<tr><td>ssl-allow-tls</td><td>✗</td></tr>
-<tr><td>ssl-ciphers</td><td>✗</td></tr>
-<tr><td>ssl-disable-sslv3</td><td>✗</td></tr>
-<tr><td>ssl-disable-tlsv1</td><td>✗</td></tr>
-<tr><td>ssl-disable-tlsv1-1</td><td>✗</td></tr>
-<tr><td>ssl-disable-tlsv1-2</td><td>✗</td></tr>
-<tr><td>ssl-hostname</td><td>✗</td></tr>
-<tr><td>ssl-require-client-certificate</td><td>✗</td></tr>
-<tr><td>static-expires</td><td>✗</td></tr>
-<tr><td>threads</td><td>✗</td></tr>
-<tr><td>url-rewriter</td><td>rewriter</td></tr>
-<tr><td>webDAV</td><td>✗</td></tr>
-</tbody>
-</table>
-
 
           </div>
         </div>
