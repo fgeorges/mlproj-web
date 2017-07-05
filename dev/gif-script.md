@@ -6,7 +6,7 @@ and convert it to a GIF, and to script the animation in Emacs:
 - https://github.com/Malabarba/camcorder.el
 - https://github.com/vermiculus/package-demo
 
-Once `package-demo` loaded, we can execute:
+Once `package-demo` is loaded, we can execute:
 
 ```lisp
 (package-demo--run-demo

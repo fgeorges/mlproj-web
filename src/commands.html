@@ -68,14 +68,15 @@
                 <li><a href="#setup"><code>setup</code></a> - setup the environment on MarkLogic</li>
                 <li><a href="#load"><code>load</code></a> - load documents to the content database</li>
                 <li><a href="#deploy"><code>deploy</code></a> - deploy modules to the modules database</li>
+                <li><a href="#watch"><code>watch</code></a> - deploy modules as soon as modified</li>
               </ul>
             </p>
             <p>
               Each command can get parameters and options, after its name.  Before its
               name, there can also be some <em>global options</em>.  In the following
               invocation, <code>-e</code> is a global option, with value <code>dev</code>,
-              <code>load</code> is the name of the command, and <code>data</code> is a
-              parameter of the command itself:
+              <code>load</code> is the name of the command, and <code>-d</code> and
+              <code>data</code> are options of the command itself:
             </p>
             <pre>mlproj -e dev load -d content data</pre>
             <p></p>
@@ -207,26 +208,40 @@
               Display help about another command.
             </p>
             <pre>
-   help [name]
+   Usage:
 
-   Display help about another command.
-   Just give the command name as a parameter.
+       mlproj help [cmd]
+
+   Options:
+
+       &lt;cmd&gt;         the name of the command to display the help of
+
+   Display help about another command.  Just give the command name as a
+   parameter.  With no parameter, display the global help message.
 
    Example:
+
       mlproj help deploy</pre>
             <p>
             </p>
 
             <h3 id="new">new</h3>
             <p>
-              Create a new project in an empty dir.
+              Create a new project in the current directory.
             </p>
             <pre>
-   new
+   Usage:
 
-   Create a new project in the current directory.
-   The directory must be empty.
-   The command asks interactively questions about the project to create.</pre>
+       mlproj new [-f]
+
+   Options:
+
+       -f, --force         force overriding existing files
+
+   The command asks interactively questions about the project to create.  If
+   the current directory is not empty, asks confirmatino before going any
+   further.  Trying to write a file that already exists results in an error,
+   except if the flag --force has been set.</pre>
             <p>
             </p>
 
@@ -235,11 +250,13 @@
                Display the environment.
             </p>
             <pre>
-   show
+   Usage:
 
-   Display the details of the given environment.
-   The environment is "resolved" before display (variables, dependencies
-   are resolved, parameters are injected.)</pre>
+       mlproj show
+
+   Display the details of the given environment.  The environment is "resolved"
+   before being displayed (variables, dependencies are resolved, parameters
+   are injected.)</pre>
             <p>
             </p>
 
@@ -248,37 +265,56 @@
               Setup the environment on MarkLogic.
             </p>
             <pre>
-   setup
+   Usage:
 
-   Create components in the given environment on MarkLogic.
-   Use the connection details from the environment to connect to
-   MarkLogic.
-   If (some) components already exist, ensure they have the right
-   properties and update them as needed.</pre>
+       mlproj setup
+
+   Create components in the given environment on MarkLogic.  Use the connection
+   details from the environment to connect to MarkLogic.  If (some) components
+   already exist, ensure they have the right properties and update them as
+   needed.</pre>
             <p>
             </p>
 
             <h3 id="load">load</h3>
             <p>
-              Load a document to the content database.
+              Load documents to the content database.
             </p>
             <pre>
-   load [args...]
+   Usage:
 
-   Load documents to a database.
+       mlproj load [-a srv|-b db] [-/ dir|-1 file] [what]
 
-       mlproj load [-a &lt;srv&gt;|-b &lt;db&gt;] [-/ &lt;dir&gt;|-1 &lt;doc&gt;|&lt;what&gt;]
+   Options:
 
-   Content.  The argument is the path of a directory.  Its default value is
-   "data/".  The option @dir is the default, and can be used explicitely.  The
-   option @doc can be used to point to a file instead.
+       -a, --as, --server &lt;srv&gt;         server, get its content database
+       -b, --db, --database &lt;db&gt;        target database
+       -/, --dir, --directory &lt;dir&gt;     directory to load
+       -1, --doc, --document &lt;file&gt;     file to load
+       &lt;what&gt;                           directory or file to load
 
-   Target.  The file(s) are loaded to a database.  It can be set explicitely
-   with @db.  The option @as gives the name of an application server.  Its
-   content database if used.  If no explicit target, if there is a single one
-   server, use it.  Or if there is only one database, use it.
+   Target:
 
-   For instance, the following loads files under data/ to the "content" db:
+   The file(s) are loaded to a database.  It can be set explicitely with --db.
+   The option --as gives the name of an application server.  Its content
+   database if used.  If no explicit target, if there is a single one server,
+   use it.  Or if there is only one database, use it.  Servers and databases
+   can be referenced by name or by ID.
+
+   Options --as and --db are mutually exclusive.
+
+   Content:
+
+   The content to load is given either with --dir (points to a directory), or
+   with --doc (points to a file).  If none is given and &lt;what&gt; is used instead,
+   it must point to a directory.  If &lt;what&gt; is not given either, its default
+   value is "data/".
+
+   Options --dir and --doc, and argument &lt;what&gt; are mutually exclusive.
+
+   Examples:
+
+   The following loads files under "data/" to the "content" db:
 
        mlproj load --db content --dir data/
 
@@ -297,18 +333,46 @@
 
             <h3 id="deploy">deploy</h3>
             <p>
-              Deploy modules to a database.
+              Deploy modules to the modules database.
             </p>
             <pre>
-   deploy [args...]
+   Usage:
 
-   Deploy modules to a database.
+       mlproj deploy [-a srv|-b db] [-/ dir|-1 file] [what]
 
-       mlproj deploy [-a &lt;srv&gt;|-b &lt;db&gt;] [-/ &lt;dir&gt;|-1 &lt;doc&gt;|&lt;what&gt;]
+   Options:
 
-   Works like the command load, with two exceptions: by default the argument
-   is "src/", and from an application server it takes the modules database
-   instead of the content database.</pre>
+       -a, --as, --server &lt;srv&gt;         server, get its modules database
+       -b, --db, --database &lt;db&gt;        target database
+       -/, --dir, --directory &lt;dir&gt;     directory to deploy
+       -1, --doc, --document &lt;file&gt;     file to deploy
+       &lt;what&gt;                           directory or file to deploy
+
+   Works like the command load, with two exceptions: the default value of
+   &lt;what&gt; is "src/" instead of "data/", and when given a server, it takes its
+   modules database instead of its content database.</pre>
+            <p>
+            </p>
+
+            <h3 id="watch">watch</h3>
+            <p>
+              Watch modules, deploy them as soon as modified.
+            </p>
+            <pre>
+   Usage:
+
+       mlproj watch [-a srv|-b db] [-/ dir|-1 file] [what]
+
+   Options:
+
+       -a, --as, --server &lt;srv&gt;         server, get its modules database
+       -b, --db, --database &lt;db&gt;        target database
+       -/, --dir, --directory &lt;dir&gt;     directory to watch
+       -1, --doc, --document &lt;file&gt;     file to watch
+       &lt;what&gt;                           directory or file to watch
+
+   Works like the command deploy, except it watches the given file or directory
+   for changes, and deploy them each when they change on the filesystem.</pre>
             <p>
             </p>
 

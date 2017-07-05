@@ -106,30 +106,39 @@
             <pre>
 <b>$</b> mlproj help
 
-  Usage: mlproj [options] [command]
+   This is mlproj, version 0.38.0
 
-  Commands:
+   Usage:
 
-    help [name]  display help about another command
-    new          create a new project in an empty dir
-    show         display the environment
-    setup        setup the environment on MarkLogic
-    deploy       deploy modules to the modules database
+       mlproj [options] &lt;command&gt; [options]
 
-  Options:
+   Commands:
 
-    -h, --help                output usage information
-    -V, --version             output the version number
-    -c, --code &lt;code>         set/override the @code
-    -d, --dry                 dry run
-    -e, --environ &lt;name>      environment name
-    -f, --file &lt;file>         environment file
-    -h, --host &lt;host>         set/override the @host
-    -p, --param &lt;name:value>  set/override a parameter value (use : or =)
-    -s, --srcdir &lt;dir>        set/override the @srcdir
-    -u, --user &lt;user>         set/override the @user
-    -v, --verbose             verbose mode
-    -z, --password            ask for password interactively</pre>
+       help         display help about another command
+       new          create a new project in the current directory
+       show         display the environment
+       setup        setup the environment on MarkLogic
+       load         load documents to a database
+       deploy       deploy modules to a database
+       watch        deploy modules as soon as modified
+
+   Global options:
+
+       -c, --code &lt;code&gt;          set/override the @code
+       -d, --dry, --dry-run             dry run
+       -e, --environ &lt;name&gt;       set the environment name
+       -f, --file &lt;path&gt;          set the environment file
+       -h, --host &lt;host&gt;          set/override the @host
+       -p, --param &lt;name:value&gt;   set/override a parameter value &lt;name:value&gt;
+       -u, --user &lt;user&gt;          set/override the @user
+       -v, --verbose                    verbose mode
+       -z, --password                   ask for password interactively
+
+   Command options:
+
+       See the help of individual commands, e.g. "mlproj help load".
+
+   Visit http://mlproj.org/ for all details.</pre>
             <p>
                This animation gives you a taste of <code>mlproj</code> (it creates a new
                project interactively, shows the details of the <code>prod</code>
