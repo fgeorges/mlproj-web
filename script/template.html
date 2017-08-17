@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>mlproj - Projects</title>
+    <title>mlproj - __TITLE__</title>
 
     <!-- CSS stylesheets -->
     <link href="css/bootstrap.css"  rel="stylesheet" type="text/css" />
@@ -46,18 +46,7 @@
         <div class="row">
           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 
-            <h1>Projects</h1>
-            <p>
-              The overall project directory layout follows the one defined by XProject.
-              Everything is handled for you when you create the project using <code>mlproj
-              new</code>.
-            </p>
-            <p>
-              Essentially, all that is used is that the code must be in the directory
-              <code>src/</code>, whilst the project-related data is under
-              <code>xproject/</code> (this includes the project descriptor in
-              <code>project.xml</code>, and the environments in <code>mlenvs/</code>.)
-            </p>
+__CONTENT__
 
           </div>
         </div>
@@ -68,6 +57,12 @@
     <script src="js/jquery.js"></script>
     <script src="js/bootstrap.js"></script>
     <script src="js/clean-blog.js"></script>
+
+    <script>
+       $(document).ready(function() {
+          $('table').addClass('table');
+       });
+    </script>
 
   </body>
 </html>

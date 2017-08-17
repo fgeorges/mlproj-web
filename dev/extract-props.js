@@ -73,24 +73,42 @@ function exportText()
     const display = (found, obj) => {
         var res = accumulate(found, obj);
         Object.keys(res).sort().forEach(p => {
-            var left = p + ': ';
+            var left = p + '  ';
             var pad  = padding.slice(left.length);
             console.log(left + pad + res[p]);
         });
     };
 
+    const unsupported = (obj, all) => {
+        var res = accumulate(byName, obj);
+	all.filter(p => ! res[p])
+	    .sort()
+	    .forEach(p => console.log(p));
+    };
+
+    console.log();
     console.log('# db props');
     display(byName, props.database);
+    console.log();
     console.log('# srv props');
     display(byName, props.server);
+    console.log();
     console.log('# db paths');
     display(byPath, props.database);
+    console.log();
     console.log('# srv paths');
     display(byPath, props.server);
+    console.log();
+    console.log('# db unsuported');
+    unsupported(props.database, all.dbProps);
+    console.log();
+    console.log('# srv unsupported');
+    unsupported(props.server, all.srvProps);
+    console.log();
 }
 
 // export to a HTML table
-// if `ignore` is thruly, ignore not supoprted properties
+// if `ignore` is truthy, ignore not supported properties
 function exportTable(ignore)
 {
     const display = (obj, all) => {
@@ -110,7 +128,7 @@ function exportTable(ignore)
         // TODO: Detect `res` props that are not in `all`, and generate an error
         // for unknown property...
         all.forEach(p => {
-            if ( ! ignore ) {
+            if ( ! ignore || res[p] ) {
                 console.log(
                     '<tr>'
                     + '<td>' + p + '</td>'
