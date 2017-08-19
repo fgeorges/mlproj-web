@@ -17,6 +17,8 @@ The NPM package `marked` must have been installed in `script/` first.
 
 ## TODO
 
+- document the `apis` property in environ files
+- document the way to combine envron names with `/`
 - `index.html` can at least share (parts of) `script/template.html`
 - generate the table in `src/properties.md` (at very least adapt the script
   `dev/extract-props.js` so it outputs Markdown to be copied and pasted
