@@ -3,13 +3,30 @@
 This page documents the database object structre, in the environment file
 format.  It contains the following sections:
 
+- [Database references](#database-references)
 - [Overall structure](#overall-structure)
 - [Range indexes](#range-indexes)
 - [Searches](#searches)
 - [Lexicons](#lexicons)
 
-For the definition of the overall environment file format, look
-at [that page](environments).
+## Database references
+
+In addition to the global array of databases, there are a few places in an
+environment file expecting a database object (namely, to set the content or
+modules database of a server, or to set the schema, security or triggers
+database of another database).
+
+In those place, you can either put a full database object definition, or rather
+use a <em>database reference</em>.  A database reference is an object containing
+only one property: `idref` to point to a database by ID, or `nameref` to point
+to a database by name:
+
+    "schema": {
+        "nameref": "@{code}-schema"
+    },
+    "security": {
+        "idref": "security"
+    }
 
 ## Overall structure
 
