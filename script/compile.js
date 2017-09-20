@@ -26,7 +26,7 @@ const menu = [
 	{ name: 'watch',   href: 'watch',   title: 'watch' }
     ]},
     { name: 'projects',  href: 'projects',  title: 'Projects' },
-    { name: 'environs',  href: 'environs',  title: 'Environments' },
+    { name: 'environments',  href: 'environs',  title: 'Environments' },
     { name: 'databases', href: 'databases', title: 'Databases' },
     { name: 'servers',   href: 'servers',   title: 'App servers' },
     { name: 'sources',   href: 'sources',   title: 'Source sets' },

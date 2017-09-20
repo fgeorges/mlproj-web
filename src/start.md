@@ -46,7 +46,7 @@ way.
 
 This is basically the same definition of "project" as in any IDE.
 
-In the code project management, there is rarely one-size-fits-all.  So `mlproj`
+In code project management, there is rarely one-size-fits-all.  So `mlproj`
 tries not to constrain you too much, and you can use it with your project,
 complying to its existing rules and conventions, however crazy these rules are
 (with a very few exceptions.)
@@ -126,7 +126,7 @@ changed:
    host:                localhost
    user:                admin
    password:            *****
-   sources dir:         /tmp/yo/src/
+   sources dir:         /home/fgeorges/tmp/my-foobar/src/
    modules DB:          (filesystem)
    parameters:
       port:             8080
@@ -144,7 +144,7 @@ changed:
    id:                  app
    content DB:          my-foobar-content
    port:                8080
-   root:                /tmp/yo/src/
+   root:                /home/fgeorges/tmp/my-foobar/src/
 
 <b>$</b> 
 </pre>
@@ -158,7 +158,7 @@ What you see here is pretty self-explanatory:
 
 If anything must be changed, look at the files in `xproject/mlenvs/`, and see if
 you can adapt the corresponding value.  All details are in
-the [environment format](environments) documentation.
+the [environment format](environs) documentation.
 
 ## On MarkLogic!
 
@@ -170,20 +170,20 @@ more simple:
 <b>$</b> mlproj setup
 --- <b>Prepare</b> ---
 <b>•</b> <span style="color: orange">checking</span> the database:      my-foobar-content
-<span style="color: orange">→</span> Retrieve database props:   my-foobar-content
+<span style="color: orange">→</span> Retrieve database props:    my-foobar-content
   need to <span style="color: green">create</span> database:    my-foobar-content
    <b>•</b> <span style="color: orange">checking</span> forests
      need to <span style="color: green">create</span> forest:   my-foobar-content-001
 <b>•</b> <span style="color: orange">checking</span> the http server:   my-foobar
-<span style="color: orange">→</span> Retrieve server props:     my-foobar
+<span style="color: orange">→</span> Retrieve server props:      my-foobar
   need to <span style="color: green">create</span> server:      my-foobar
 
 --- <b>Progress</b> ---
-<span style="color: orange">→</span> Create database:           my-foobar-modules
-<span style="color: orange">→</span> Create forest:             my-foobar-modules-001
-<span style="color: orange">→</span> Create database:           my-foobar-content
-<span style="color: orange">→</span> Create forest:             my-foobar-content-001
-<span style="color: orange">→</span> Create server:             my-foobar
+<span style="color: orange">→</span> Create database:            my-foobar-modules
+<span style="color: orange">→</span> Create forest:              my-foobar-modules-001
+<span style="color: orange">→</span> Create database:            my-foobar-content
+<span style="color: orange">→</span> Create forest:              my-foobar-content-001
+<span style="color: orange">→</span> Create server:              my-foobar
 
 --- <b>Summary</b> ---
 <span style="color: green">Done</span>:
@@ -278,7 +278,7 @@ the code, and load some data.
 The next steps now, if you want to learn more, is to have a look at:
 
 - the list of [commands](commands) available
-- the description of the [environment](environments) files, to describe the
+- the description of the [environment](environs) files, to describe the
   components to create on MarkLogic (databases and app servers) and their
   properties (indexes, URL rewriter, etc.)
 

@@ -87,21 +87,21 @@ a.anchor {
 }
 
 .btn-start {
+    color: #d9e3ef;
+    background-color: #0085a1;
+    border-color: #d9e3ef;
+}
+
+.btn-start:focus {
     color: #0085a1;
     background-color: #d9e3ef;
     border-color: #0085a1;
 }
 
-.btn-start:focus {
-    color: #d9e3ef;
-    background-color: #0085a1;
-    border-color: #d9e3ef;
-}
-
 .btn-start:hover {
-    color: #d9e3ef;
-    background-color: #0085a1;
-    border-color: #d9e3ef;
+    color: #0085a1;
+    background-color: #d9e3ef;
+    border-color: #0085a1;
 }
 
 .btn {
