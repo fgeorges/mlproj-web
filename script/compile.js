@@ -25,12 +25,11 @@ const menu = [
 	{ name: 'show',    href: 'show',    title: 'show' },
 	{ name: 'watch',   href: 'watch',   title: 'watch' }
     ]},
-    { name: 'projects',  href: 'projects',  title: 'Projects' },
     { name: 'environments',  href: 'environs',  title: 'Environments' },
-    { name: 'databases', href: 'databases', title: 'Databases' },
-    { name: 'servers',   href: 'servers',   title: 'App servers' },
-    { name: 'sources',   href: 'sources',   title: 'Source sets' },
-    { name: 'config',    href: 'config',    title: 'Config' }
+    { name: 'databases',     href: 'databases', title: 'Databases' },
+    { name: 'servers',       href: 'servers',   title: 'App servers' },
+    { name: 'sources',       href: 'sources',   title: 'Source sets' },
+    { name: 'config',        href: 'config',    title: 'Config' }
 ];
 
 const sitemap = [
@@ -47,7 +46,6 @@ const sitemap = [
     { path: 'commands/setup',   href: 'commands/setup',   title: 'setup',          menu: menu },
     { path: 'commands/show',    href: 'commands/show',    title: 'show',           menu: menu },
     { path: 'commands/watch',   href: 'commands/watch',   title: 'watch',          menu: menu },
-    { path: 'projects',         href: 'projects',         title: 'Projects',       menu: menu },
     { path: 'environments',     href: 'environs',         title: 'Environments',   menu: menu },
     { path: 'databases',        href: 'databases',        title: 'Databases',      menu: menu },
     { path: 'servers',          href: 'servers',          title: 'App servers',    menu: menu },
