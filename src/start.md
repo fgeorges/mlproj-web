@@ -237,20 +237,33 @@ import module namespace foo = "http://example.com/foobar/lib/foo"
 foo:hello('world')
 </pre>
 
-Now we can deploy the code to the modules database.
+Now we can deploy the code to the modules database (remember you can use the
+`-e` option to use another environment than the default one, like this: `mlproj
+-e prod deploy`).
 
 <pre>
-<b>$</b> mlproj deploy
-<span style="color: orange">→</span> Insert document:   /endpoints/bar.xqy
-<span style="color: orange">→</span> Insert document:   /lib/foo.xqy
+<b>$</b> mlproj load
+
+--- <b>Prepare</b> ---
+<b>•</b> <span style="color: orange">checking</span> the directory:     src
+<b>•</b> <span style="color: orange">checking</span> the directory:     src/endpoints
+<b>•</b> <span style="color: orange">checking</span> the directory:     src/lib
+
+--- <b>Progress</b> ---
+<span style="color: orange">→</span> Insert documents:           2 documents
+
+--- <b>Summary</b> ---
+<span style="color: green">Done</span>:
+<span style="color: green">✓</span> Insert documents:           2 documents, for 0.000 Mo
 <b>$</b> 
 </pre>
 
 ## Load data
 
 The last step you might need in order to play with a project is the ability to
-load some document.  For that, use the command `load doc`.  First create a
-document to be loaded, in `data/hello.xml`:
+load some document.  For that, put the files in the directory `data/` and use
+the command `load`.  For instance, create the file `data/hello.xml` with the
+following content:
 
 <pre>
 &lt;greetings>
@@ -258,16 +271,37 @@ document to be loaded, in `data/hello.xml`:
 &lt;/greetings>
 </pre>
 
+and the file `data/foo/bar.json`:
+
+<pre>
+{ "answer": 42 }
+</pre>
+
 Then load it in the content database:
 
 <pre>
-<b>$</b> mlproj load doc data/hello.xml
-<span style="color: orange">→</span> Insert document:   /hello.xml
+<b>$</b> mlproj load
+
+--- <b>Prepare</b> ---
+<b>•</b> <span style="color: orange">checking</span> the directory:     data
+<b>•</b> <span style="color: orange">checking</span> the directory:     data/foo
+
+--- <b>Progress</b> ---
+<span style="color: orange">→</span> Insert documents:           2 documents
+
+--- <b>Summary</b> ---
+<span style="color: green">Done</span>:
+<span style="color: green">✓</span> Insert documents:           2 documents, for 0.000 Mo
 <b>$</b> 
 </pre>
 
-As you can see, `mlproj` conveniently infers the document URI in the database,
-based on the filename in the `data/` sub-directory.
+By default, the URI of the resulting document in the database is computed as the
+path of the file under `data/`.  In our example, documents are saved under:
+
+- `/hello.xml`
+- `/foo/bar.json`
+
+See the documentation if you need to customize the document URIs.
 
 ## What now?
 
