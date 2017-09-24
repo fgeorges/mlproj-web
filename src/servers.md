@@ -64,4 +64,40 @@ server:
 	}
 
 Each property corresponds to the property `output-{name}` in the Management API.
-For instance, `doctype-public` corresponds to `putput-doctype-public`.
+For instance, `doctype-public` corresponds to `output-doctype-public`.  You can
+also look at the
+[XSLT and XQuery Serialization](https://www.w3.org/TR/xslt-xquery-serialization-3/)
+Recommendation.
+
+## REST servers
+
+Instead of a "plain" HTTP app server, you can also create REST servers.  A REST
+server is a HTTP app server, but using a MarkLogic system rewriter, and must use
+a modules database.  There are therefore a few differences with a plain HTTP app
+server:
+
+- the property `type` must be `rest`, instead of `http`
+- `modules` is required
+- `rewriter` cannot be set, it is set by MarkLogic
+- the property `rewrite-resolves-globally` cannot be set, it is set by MarkLogic
+
+In addition, there are a few new properties specific to REST servers.  They can
+be set as properties in the `rest-config` object:
+
+    {
+        "name": "@{code}",
+        "type": "rest",
+        ...
+        "rest-config": {
+            "error-format"     : "json",
+            "xdbc"             : true,
+            "debug"            : true,
+            "tranform-all"     : true,
+            "tranform-out"     : "tranform-name",
+            "update-policy"    : "version-required",
+            "validate-options" : false,
+            "validate-queries" : true
+        }
+    }
+
+See the MarkLogic REST Developer Guide for details about these properties.
