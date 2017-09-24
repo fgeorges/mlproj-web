@@ -10,6 +10,7 @@ sections:
 - [Databases](#databases)
 - [Servers](#servers)
 - [Source sets](#source-sets)
+- [User commands](#user-commands)
 
 You can find examples of environment files in
 [`test/environs/`](http://github.com/fgeorges/mlproj/tree/master/test/environs)
@@ -258,3 +259,9 @@ creating the server.
 ## Source sets
 
 The property `sources` is an array of source sets.
+
+## User commands
+
+The property `commands` is an object.  The keys are command names, the values
+are the command implementations.  Each implementation can be a function, or an
+object itself giving more information about the command.

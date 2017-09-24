@@ -25,11 +25,12 @@ const menu = [
 	{ name: 'show',    href: 'show',    title: 'show' },
 	{ name: 'watch',   href: 'watch',   title: 'watch' }
     ]},
-    { name: 'environments',  href: 'environs',  title: 'Environments' },
-    { name: 'databases',     href: 'databases', title: 'Databases' },
-    { name: 'servers',       href: 'servers',   title: 'App servers' },
-    { name: 'sources',       href: 'sources',   title: 'Source sets' },
-    { name: 'config',        href: 'config',    title: 'Config' }
+    { name: 'environments',  href: 'environs',      title: 'Environments' },
+    { name: 'databases',     href: 'databases',     title: 'Databases' },
+    { name: 'servers',       href: 'servers',       title: 'App servers' },
+    { name: 'sources',       href: 'sources',       title: 'Source sets' },
+    { name: 'user-commands', href: 'user-commands', title: 'User commands' },
+    { name: 'config',        href: 'config',        title: 'Config' }
 ];
 
 const sitemap = [
@@ -50,6 +51,7 @@ const sitemap = [
     { path: 'databases',        href: 'databases',        title: 'Databases',      menu: menu },
     { path: 'servers',          href: 'servers',          title: 'App servers',    menu: menu },
     { path: 'sources',          href: 'sources',          title: 'Source sets',    menu: menu },
+    { path: 'user-commands',    href: 'user-commands',    title: 'User commands',  menu: menu },
     { path: 'config',           href: 'config',           title: 'Config',         menu: menu },
     { path: 'contact',          href: 'contact',          title: 'Contact' },
     { copy: true,               file: '.htaccess'  },
