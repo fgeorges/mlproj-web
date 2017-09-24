@@ -17,9 +17,9 @@ modules database of a server, or to set the schema, security or triggers
 database of another database).
 
 In those place, you can either put a full database object definition, or rather
-use a <em>database reference</em>.  A database reference is an object containing
-only one property: `idref` to point to a database by ID, or `nameref` to point
-to a database by name:
+use a *database reference*.  A database reference is an object containing only
+one property: `idref` to point to a database by ID, or `nameref` to point to a
+database by name:
 
     "schema": {
         "nameref": "@{code}-schema"
@@ -33,44 +33,42 @@ to a database by name:
 The property `databases` of an environment is an array of database objects.
 Each database object looks like the following:
 
-<pre>
-{
-    "id":   "...",
-    "name": "...",
-    "forests": [
-        "..."
-    ],
-    "schema": {
-        <em>(database object or ref)</em>
-    },
-    "security": {
-        <em>(database object or ref)</em>
-    },
-    "triggers": {
-        <em>(database object or ref)</em>
-    },
-    "indexes": {
-        "ranges": [{
-            "type":      "string",
-            "name":      "ape",
-            "positions": false,
-            "invalid":   "ignore"
-        }, {
-            "type":      "string",
-            "name":      [ "bear", "cat" ],
-            "positions": false,
-            "invalid":   "ignore"
-        }]
-    },
-    "searches": {
-        <em>(infos on searches)</em>
-    },
-    "lexicons": {
-        "uri": false,
-        "collection": true
+    {
+        "id":   "...",
+        "name": "...",
+        "forests": [
+            "..."
+        ],
+        "schema": {
+            <em>(database object or ref)</em>
+        },
+        "security": {
+            <em>(database object or ref)</em>
+        },
+        "triggers": {
+            <em>(database object or ref)</em>
+        },
+        "indexes": {
+            "ranges": [{
+                "type":      "string",
+                "name":      "ape",
+                "positions": false,
+                "invalid":   "ignore"
+            }, {
+                "type":      "string",
+                "name":      [ "bear", "cat" ],
+                "positions": false,
+                "invalid":   "ignore"
+            }]
+        },
+        "searches": {
+            <em>(infos on searches)</em>
+        },
+        "lexicons": {
+            "uri": false,
+            "collection": true
+        }
     }
-}
-</pre>
 
 ### Name and ID
 
