@@ -5,21 +5,15 @@ name, are:
 
 | short | long                   | description                                     |
 | ----- | ---------------------- | ----------------------------------------------- |
-| `-h`  | `--help`               | output usage information                        |
-| `-V`  | `--version`            | output the version number                       |
 | `-c`  | `--code <code>`        | set/override the `@code`                        |
 | `-d`  | `--dry`                | dry run                                         |
 | `-e`  | `--environ <name>`     | environment name                                |
 | `-f`  | `--file <file>`        | environment file                                |
 | `-h`  | `--host <host>`        | set/override the `@host`                        |
 | `-p`  | `--param <name:value>` | set/override a parameter value (use `:` or `=`) |
-| `-s`  | `--srcdir <dir>`       | set/override the `@srcdir`                      |
 | `-u`  | `--user <user>`        | set/override the `@user`                        |
 | `-v`  | `--verbose`            | verbose mode                                    |
 | `-z`  | `--password`           | ask for password interactively                  |
-
-The options `--help` and `--version` simply display the global help message or
-the version number, and exit.
 
 The option `--dry` enables *dry run*.  In dry run, no change is actually
 executed.  This allows one to double-check what would be the effect of running
@@ -31,10 +25,9 @@ the Management API are shown on the screen.  Used in conjunction with `--dry`,
 this is an easy yet powerful way both to investigate when something goes wrong,
 and to learn the Management API.
 
-The options `--code`, `--host`, `--srcdir`, and `--user` set or override
-resp. the code, host, srcdir, and user values.  These values can be used in the
-environment files by using the substitution codes `@{code}`, `@{host}`,
-`@{srcdir}`, and `@{user}` respectively.
+The options `--code`, `--host`, and `--user` set or override resp. the code,
+host, and user values.  These values can be used in the environment files by
+using the substitution codes `@{code}`, `@{host}`, and `@{user}` respectively.
 
 The option `--password` allows to set the password to use for the connection to
 MarkLogic.  Unlike for `--host` and `--user`, the password is not passed on the

@@ -2,17 +2,25 @@
 
 Display help about another command.
 
-       Usage:
+## Usage
 
-           mlproj help [cmd]
+    mlproj help [cmd]
 
-       Options:
+      <cmd>              the name of the command to display the help of
 
-           <cmd>         the name of the command to display the help of
+## Description
 
-       Display help about another command.  Just give the command name as a
-       parameter.  With no parameter, display the global help message.
+`mlproj` is (in part) self-documented.  You can display the documentation of
+each command by using the command `help` itself, and giving it the name of the
+command you want to look at.
 
-       Example:
+The documentation displayed is a summary of the corresponding section in the
+reference documentation.  Also, it is only possible to look at documentation of
+commands.  For everything else, like the format of the environment files, look
+at the reference documentation at http://mlproj.org/.
 
-          mlproj help deploy
+## Example
+
+The following displays the help for the command setup:
+
+    mlproj help setup
