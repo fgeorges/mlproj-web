@@ -98,8 +98,14 @@ substitution.)
 The `code` and the three `connect` properties (`host`, `user`, and `password`)
 can be set with options on the command line.  The value set on the command line
 takes precedence over the corresponding value in the environment file, if any,
-which is convenient to use another value without modifying any file.  See
-the [global options](commands#global-options) for details.
+which is convenient to use another value without modifying any file.  See the
+[global options](commands/options) for details.
+
+**Note** - The `code` property is documented here because it is possible to set
+it in environment files, and this is the reference documentation.  Note that
+this is very unusual though, and for very specific situations.  If you are not
+sure, just do not use it.  It defaults to the value of the attribute `abbrev` in
+the project file: `xproject/project.xml`.
 
 ## Parameters
 
