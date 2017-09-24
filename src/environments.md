@@ -58,7 +58,6 @@ The overall structure of an environment file is like the following:
             "code":   "awesome-app",
             "title":  "Short title for the environment",
             "desc":   "Longer description of the environment.  You can use **Markdown**.",
-            "srcdir": "...",
             "connect": {
                 "host":     "...",
                 "user":     "...",
@@ -88,12 +87,6 @@ are:
   environment. It can use Markdown notation (the notation used in Github).
 - `desc` - The description is a longer description of the environment than the
   title. It can use Markdown notation.
-- `srcdir` - The source directory is the path to the directory with the sources
-  of the project. This property is generally set automatically, when used in a
-  standard `XProject` structure, as the directory `src/`.  <br /> It is
-  sometimes useful to set it explicitly for either 1) represent a more complex
-  setup, or 2) still be able to use those files with a project with another
-  structure than the standard `XProject` structure.
 - `connect` - This property contains connection information: the user name to
   use, its password, as well as the host where MarkLogic is installed.
 
@@ -101,7 +94,7 @@ These properties can also be referred to in other places, for "variable
 substitutions" (see the section on [parameters](#parameters) for details on
 substitution.)
 
-The `code`, `srcdir`, and the three `connect` properties (host, user, password)
+The `code` and the three `connect` properties (`host`, `user`, and `password`)
 can be set with options on the command line.  The value set on the command line
 takes precedence over the corresponding value in the environment file, if any,
 which is convenient to use another value without modifying any file.  See
