@@ -18,14 +18,18 @@ database of another database).
 
 In those place, you can either put a full database object definition, or rather
 use a *database reference*.  A database reference is an object containing only
-one property: `idref` to point to a database by ID, or `nameref` to point to a
-database by name:
+one property: `idref` to point to a database by ID, `nameref` to point to a
+database by name, or `sysref` to give the name of a database existing outside of
+this project (typically a *system database*, like `Documents` or `Modules`):
 
     "schema": {
         "nameref": "@{code}-schema"
     },
     "security": {
         "idref": "security"
+    },
+    "triggers": {
+        "sysref": "Triggers"
     }
 
 ## Overall structure
