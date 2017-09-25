@@ -49,6 +49,10 @@ Each database object looks like the following:
             <em>(database object or ref)</em>
         },
         "indexes": {
+            "namespaces": {
+                "ns": "http://example.org/ns",
+                "me": "http://example.org/me"
+            },
             "ranges": [{
                 "type":      "string",
                 "name":      "ape",
@@ -57,6 +61,11 @@ Each database object looks like the following:
             }, {
                 "type":      "string",
                 "name":      [ "bear", "cat" ],
+                "positions": false,
+                "invalid":   "ignore"
+            }, {
+                "type":      "string",
+                "path":      [ "ns:foo/ns:bar", "me:foo/me:bar" ],
                 "positions": false,
                 "invalid":   "ignore"
             }]
