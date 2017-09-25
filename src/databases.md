@@ -76,6 +76,9 @@ Each database object looks like the following:
         "lexicons": {
             "uri": false,
             "collection": true
+        },
+        "properties": {
+            <em>(any extra property)</em>
         }
     }
 
@@ -203,3 +206,28 @@ the Management API.  For instance, `case-sensitive` corresponds to
 
 `lexicons.uri` and `lexicons.collection` set whether to maintain resp. a URI or
 a collection lexicon for that database.
+
+## Extra properties
+
+The propery called `properties` is a way to extend mlproj with properties of the
+Management API that are not supported yet.  The databases are created and
+modified by using the Management API `/databases` and
+`/databases/{name}/properties`.
+
+All properties of these API are not supported and modelled in mlproj environment
+files.  If you need to set one, just use something like the following on a
+database:
+
+    "properties": {
+        "extra-property-name": "some exciting value"
+    }
+
+You can add several properties if you want.  The values can be anything, just as
+documented in the Management API documentation from MarkLogic.
+
+If you do need this, please contact mlproj authors, in order to see if we should
+not support your use case natively.  We like not to prematurely support all
+properties by using copy and paste, but rather wait for someone to actually use
+it to make sure we, together, craft a good model for it in the environment
+files, based on actual needs.  So if that is the case for you, please contact
+us.

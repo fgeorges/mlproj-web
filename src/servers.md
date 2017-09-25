@@ -18,6 +18,9 @@ Each server is an object that looks like the following:
         },
         "output": {
             <em>(serialization options)</em>
+        },
+        "properties": {
+            <em>(any extra property)</em>
         }
     }
 
@@ -68,6 +71,31 @@ For instance, `doctype-public` corresponds to `output-doctype-public`.  You can
 also look at the
 [XSLT and XQuery Serialization](https://www.w3.org/TR/xslt-xquery-serialization-3/)
 Recommendation.
+
+## Extra properties
+
+The propery called `properties` is a way to extend mlproj with properties of the
+Management API that are not supported yet.  The app servers are created and
+modified by using the Management API `/servers` and
+`/servers/{name}/properties`.
+
+All properties of these API are not supported and modelled in mlproj environment
+files.  If you need to set one, just use something like the following on an app
+server:
+
+    "properties": {
+        "extra-property-name": "some exciting value"
+    }
+
+You can add several properties if you want.  The values can be anything, just as
+documented in the Management API documentation from MarkLogic.
+
+If you do need this, please contact mlproj authors, in order to see if we should
+not support your use case natively.  We like not to prematurely support all
+properties by using copy and paste, but rather wait for someone to actually use
+it to make sure we, together, craft a good model for it in the environment
+files, based on actual needs.  So if that is the case for you, please contact
+us.
 
 ## REST servers
 
