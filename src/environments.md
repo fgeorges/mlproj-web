@@ -210,7 +210,6 @@ Let say we point to the following environment file:
         "mlproj": {
             "format": "0.1",
             "import": "base.json",
-            "title":  "The local environment for development",
             "connect": {
                 "host":     "localhost",
                 "user":     "admin",
@@ -233,8 +232,6 @@ and the following in `base.json`:
     {
         "mlproj": {
             "format": "0.1",
-            "code":   "my-app",
-            "title":  "The base environment config",
             "params": {
                 "port": 8080,
                 "root": "/"
@@ -262,8 +259,6 @@ and variable substitutions have been resolved:
     {
         "mlproj": {
             "format": "0.1",
-            "code":   "my-app",
-            "title":  "The local environment for development",
             "connect": {
                 "host":     "localhost",
                 "user":     "admin",
