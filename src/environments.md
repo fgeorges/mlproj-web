@@ -7,9 +7,10 @@ sections:
 - [Overall structure](#overall-structure)
 - [Parameters](#parameters)
 - [Imports](#imports)
+- [Source sets](#source-sets)
 - [Databases](#databases)
 - [Servers](#servers)
-- [Source sets](#source-sets)
+- [MIME types](#mime-types)
 - [User commands](#user-commands)
 
 You can find examples of environment files in
@@ -28,7 +29,7 @@ You can find examples of environment files in
 ## Introduction
 
 The environment files describe the details of a MarkLogic environment.  They
-includes connection details, but also all the components and their details.
+include connection details, but also all the components and their details.
 "Component" is a generic term used here to refer to both databases and app
 servers.
 
@@ -67,12 +68,21 @@ The overall structure of an environment file is like the following:
             "params": {
                 "..."
             },
+            "sources": [{
+                "..."
+            }],
             "databases": [{
                 "..."
             }],
             "servers": [{
                 "..."
-            }]
+            }],
+            "mime-types": [{
+                "..."
+            }],
+            "commands": {
+                "..."
+            }
         }
     }
 
@@ -250,11 +260,19 @@ a single string as the value of `import`
 
     "import": [ "one.json", "two.json", "three.json" ]
 
+## Source sets
+
+The property `sources` is an array of source sets.
+
+See [Source sets](sources) for all details.
+
 ## Databases
 
 The property `databases` is an array of databases.  Each database has a name,
 and might have an ID.  It contains all the properties you want to set when
 creating the database.
+
+See [Databases](databases) for all details.
 
 ## Servers
 
@@ -262,12 +280,30 @@ The property `servers` is an array of app servers.  Each server has a name,
 and might have an ID.  It contains all the properties you want to set when
 creating the server.
 
-## Source sets
+See [App servers](servers) for all details.
 
-The property `sources` is an array of source sets.
+## MIME types
+
+The property `mime-types` is an array of MIME types.  Each MIME type is of the
+following format:
+
+    {
+        "name"       : "application/mathematica",
+        "extensions" : "ma, nb, mb",
+        "format"     : "text",
+    }
+
+The format can be either:
+
+- `binary`
+- `json`
+- `text`
+- `xml`
 
 ## User commands
 
 The property `commands` is an object.  The keys are command names, the values
 are the command implementations.  Each implementation can be a function, or an
 object itself giving more information about the command.
+
+See [User commands](user-commands) for all details.
