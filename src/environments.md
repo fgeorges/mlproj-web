@@ -49,6 +49,40 @@ command to use:
   construct a file name: `xproject/mlenvs/{name}.json`
 - pass the path to an environment file, using the option `-f`
 
+An environment file can be either a JSON file (it then must be named
+`xproject/mlenvs/{name}.json`) or a JavaScript file (then named
+`xproject/mlenvs/{name}.js`).  In case of a JavaScript file, it is evaluated
+using `require()`, and its content must result to a function, which is called
+and must return an environment object, like if it was JSON.  The following is an
+example of an environment file written as JavaScript, simply importing another
+environment in `base.json`:
+
+    module.exports = function() {
+        return {
+            "mlproj": {
+                "format": "0.1",
+                "import": "base.json"
+            }
+        };
+    };
+
+It is thus equivalent to the following environment file, written as plain JSON:
+
+    {
+        "mlproj": {
+            "format": "0.1",
+            "import": "base.json"
+        }
+    }
+
+The potential benefit of using a JavaScript file instead of JSON is two-fold:
+
+- you get all flexibility of JavaScript to generate the environment file,
+  because the function is executed so you can use whatever you are pleased;
+- you can use functions as values for some properties, which you cannot do in
+  plain JSON (this is especially useful for properties like `commands`, to
+  define user commands).
+
 ## Overall structure
 
 The overall structure of an environment file is like the following:
