@@ -81,20 +81,309 @@ relevant here):
 
 In the documentation, we always use `=>` for consistency.
 
-You can invoke this user command [...]  **TODO**: Continue here...
+You can invoke this user command using "`mlproj run databases`".  Using the
+`apis` object, it access the Management API, the endpoint returning the list of
+all databases in the cluster, and for each of them log it on the console.
+
+<pre>
+<b>$</b> mlproj run databases
+--- <b>Prepare</b> ---
+
+--- <b>Progress</b> ---
+<span style="color: orange">→</span> Apply the user command: databases
+App-Services
+Documents
+Extensions
+Fab
+Last-Login
+Meters
+Modules
+my-foobar-content
+my-foobar-modules
+Schemas
+Security
+Triggers
+
+--- <b>Summary</b> ---
+<span style="color: green">Done</span>:
+<span style="color: green">✓</span> Apply the user command: databases
+<b>$</b>
+</pre>
 
 ## Writing a command
 
-**TODO**: Document `commands` in environs...
+In order to write a user command, you use the `commands` property in an
+environment file.  Its value is an object: the keys are the names of the user
+commands, the values are functions, the actual implementations of the user
+commands.  The following declares two user commands, resp. `foo` and `bar`:
+
+    commands: {
+        foo: () => {
+            console.log('Hello, foo!');
+        },
+        bar: () => {
+            console.log('Hello, bar!');
+        }
+    }
+
+Each user command simply display a message on the console.  Note that because
+the value of each user command is an actual JavaScript function, the environment
+file must be a JavaScript file (not a plain JSON file).  You can mix and match
+JavaScript and JSON environment files in your project (they can import each
+other, both ways).
+
+A user command function receives three parameters when it is called: an instance
+of the `Apis` class, of the `Environ` class and of the `Context` class.  By
+convention, they are called resp. `apis`, `environ` and `ctxt`, but of course
+you call them what you want, only the position is relevant.  Also, because it is
+JavaScript, you can omit them if you do not need them (typically only declaring
+`apis` if you do not need `environ` and `ctxt`):
+
+    commands: {
+        foo: (apis, environ, ctxt) => {
+            ... use apis, environ and ctxt ...
+        },
+        bar: (apis) => {
+            ... only use apis ...
+        }
+    }
 
 ## The Apis class
 
-**TODO**: Document `Apis`...
+The `Apis` class provides a fluent JavaScript API to access the MarkLogic APIs.
+At several levels it provides you with synchronuous `get()`, `post()` and
+`put()` functions, taking care of the connection details, took from the
+environment.  For instance:
+
+    apis.get({ port: 8002 }, '/manage/v2/databases')
+
+sends a GET request to the given URL on the given port.  It takes the host from
+the connection details from the environment.  The following:
+
+    apis.manage()
+        .get({}, '/databases')
+
+send a GET request to the Management API, on the endpoint `/databases`.  It is
+the same as the previous request, unless the environment configure the
+Management API with different values.  The following:
+
+    apis.manage()
+        .databases()
+
+returns the list of databases from the Management API, which is the same as the
+previous requests as well, except it interprets the result and returns an array
+of strings with only the names of the databases.
+
+The JavaScript API lets you "drill down" the MarkLogic API, and either use the
+specialized and convenient functions, or rather use the full power of the
+MarkLogic APIs in ways that were not thought about.  Another example is:
+
+    apis.manage()
+        .server('foobar')
+        .properties()
+
+that returns all properties of the app server `foobar`.  Which is the same as:
+
+    apis.manage()
+        .server('foobar')
+        .get({}, '/properties')
+
+**Requests**
+
+At several levels, you have the `get()`, `post()` and `put()` functions.  They
+all have the same set of parameters:
+
+- `params` - an object that can contains different values
+- `url` - the URL to send the request to
+- `data` - the payload of the request (only for `post()` and `put()`)
+- `type` - the content type of the request (only for `post()` and `put()`)
+
+The `params` can have the following properties:
+
+- `url` - the full URL to send the request to
+- `host` - the host to send the request to
+- `api` - the name of the API to send the request to (`manage`, `rest`, `admin`,
+  `client` or `xdbc`)
+- `ssl` - true or false, to use `https` or `http`
+- `port` - the port number
+- `path` - the path part of the URL
+
+At same levels, the "scope" of the request is already set to a given API, or to
+a specific endpoint, etc., so you do not have to worry about this.  Some calls
+are "final calls" (like `apis.manage().databases()`) when others rather
+represent specific points in the APIs endpoints (like
+`apis.manage().server('foobar')` which represents the intermediary endpoint for
+the app server `foobar`, but is not an endpoint itself).
+
+**Top-level requests**
+
+The `Apis` object lets you send any HTTP request, by default configured with the
+connection details from the environment.
+
+    apis.get(params, url)
+
+Sends a GET request using the given parameters.
+
+    apis.post(params, url, body, type)
+
+Sends a POST request using the given parameters and payload.
+
+    apis.put(params, url, body, type)
+
+Sends a PUT request using the given parameters and payload.
+
+**Source sets**
+
+The `Apis` object gives you access to the source sets.
+
+    apis.source(name)
+
+Return an object representing the named source set.
+
+    source.files()
+
+Return an array with all the files in the source set.  The filtering is applied
+to the content of the directory (that is, the source set `garbage`, `include`
+and `exclude`).
+
+**Management API**
+
+The `Apis` object gives you access to an encapsulated Management API.
+
+    apis.manage()
+
+Return an object to access the Management API.
+
+    manage.get(params, url)
+
+Sends a GET request to the Management API using the given parameters.
+
+    manage.post(params, url, body, type)
+
+Sends a POST request to the Management API using the given parameters and
+payload.
+
+    manage.put(params, url, body, type)
+
+Sends a PUT request to the Management API using the given parameters and
+payload.
+
+    manage.databases()
+
+Return the list of databases on the cluster, as an array of strings (the names
+of the databases).
+
+    manage.server(name, group)
+
+Return an object to access the Management API for the given app server.  `name`
+is the name of the app server, `group` is its group (defaults to `Default`).
+
+    server.get(params, url)
+
+Sends a GET request to the app server endpoint of the Management API using the
+given parameters.
+
+    server.post(params, url, body, type)
+
+Sends a POST request to the app server endpoint of the Management API using the
+given parameters and payload.
+
+    server.put(params, url, body, type)
+
+Sends a PUT request to the app server endpoint of the Management API using the
+given parameters and payload.
+
+    server.properties()
+
+Return the properties of the app server.
+
+    server.properties(props)
+
+Set the properties of the app server.  Takes care of restarting if necessary
+(for instance if you change the port number).
 
 ## The Environ class
 
-**TODO**: Document `Environ`...
+The `Environ` class gives you access to items of the selected environment.  It
+is not the plain JSON object from the environment file.  It is an object giving
+you access to items through function calls, taking care of resolving imports,
+variable substitutions, overrides, etc. for you.
+
+Here are the relevant functions, considered stable.  Other functions or
+properties on that object are not considered stable.  Use them at your own risk.
+
+    environ.params()
+
+Return the names of all parameters in the environ.  It contains all distinct
+parameter name from the property `parameters` in environment files, as well as
+the parameters passed on the command line.  They are returned as an array.
+
+    environ.param(name)
+
+Return the value for the named parameter.
+
+    environ.commands()
+
+Return the names of all user commands in the environ.
+
+    environ.command(name)
+
+Return the actual implementation of the named user command.
+
+    environ.api(name)
+
+Return the API definition for the named API.  Valid API names are:
+
+- `manage`
+- `rest`
+- `admin`
+- `clients`
+- `xdbc`
+
+See the `apis` property on the environment files.
+
+    environ.databases()
+
+Return all the databases declared in the environ.  Note that this is an array of
+objects of type `Database`, which is an internal, undocumented type.  Use at
+your own risk.
+
+    environ.database(ref)
+
+Return the database declared in the environ with name or ID equal to `ref`.
+Note that this is an object of type `Database`, which is an internal,
+undocumented type.  Use at your own risk.
+
+    environ.servers()
+
+Return all the app servers declared in the environ.  Note that this is an array
+of objects of type `Server`, which is an internal, undocumented type.  Use at
+your own risk.
+
+    environ.server(ref)
+
+Return the app server declared in the environ with name or ID equal to `ref`.
+Note that this is an object of type `Server`, which is an internal, undocumented
+type.  Use at your own risk.
+
+    environ.mimetypes()
+
+Return all the MIME types declared in the environ.  Note that this is an array
+of objects of type `MimeType`, which is an internal, undocumented type.  Use at
+your own risk.
+
+    environ.sources()
+
+Return all the source sets declared in the environ.  Note that this is an array
+of objects of type `SourceSet`, which is an internal, undocumented type.  Use at
+your own risk.
+
+    environ.source(name)
+
+Return the named source set from the environ.  Note that this is an object of
+type `SourceSet`, which is an internal, undocumented type.  Use at your own
+risk.
 
 ## The Context class
 
-**TODO**: Document `Context`...
+The `Context` class is not considered stable for now.  Use at your own risk.
