@@ -320,7 +320,18 @@ the parameters passed on the command line.  They are returned as an array.
 
     environ.param(name)
 
-Return the value for the named parameter.
+Return the value for the named parameter.  It also gives access to the following
+parameters, the so-called @-parameters, giving the value of the corresponding
+values from the environment file or overriden from the command line:
+
+- `@title`
+- `@desc`
+- `@host`
+- `@user`
+- `@password`
+
+The former 2 correspond to `title` and `desc` properties from the environ, the
+latter 3 to the corresponding values in `connect`.
 
     environ.commands()
 
