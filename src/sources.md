@@ -1,5 +1,17 @@
 # Source sets
 
+How to organize your source code.  This chapter contains the following:
+
+- [Properties](#properties)
+  - [List](#list)
+  - [Type](#type)
+  - [Target](#target)
+- [Default values](#default-values)
+- [Filtering](#filtering)
+  - [Properties](#properties)
+  - [Function filter](#function-filter)
+- [REST sources](#rest-sources)
+
 Source sets represent and configure the files on your project.  Your code
 (XQuery, JavaScript, schemas...) as well as your data to be loaded in databases.
 
@@ -47,17 +59,18 @@ But source sets can contain more properties:
         "target":  "modules",
     }
 
-These properties are:
+### List
 
-| Property  | Description                                                                                                                                  |
-|-----------|----------------------------------------------------------------------------------------------------------------------------------------------|
-| `name`    | the name of the source set, it must be unique in the environment                                                                             |
-| `dir`     | the directory attached to the source set, if relative it is resolved,relatively to the project directory (the one containing `xproject/`)    |
-| `type`    | the type of the source set, either `plain` (the default) or,`rest-src`, see below                                                            |
-| `garbage`, `include`, `exclude` | collectively, they filter which files to,take into account in the directory (and all its descendents), see "Filtering" |
-| `target`  | the default target database for this source set, see below                                                                                   |
+| Property  | Description                                                                                                                                   |
+|-----------|-----------------------------------------------------------------------------------------------------------------------------------------------|
+| `name`    | the name of the source set, it must be unique in the environment                                                                              |
+| `dir`     | the directory attached to the source set, if relative it is resolved,relatively to the project directory (the one containing `xproject/`)     |
+| `type`    | the type of the source set, either `plain` (the default) or,`rest-src`, see below                                                             |
+| `target`  | the default target database for this source set, see below                                                                                    |
+| `garbage`, `include`, `exclude` | collectively, they filter which files to, take into account in the directory (and all its descendents), see "Filtering" |
+| `filter`  | a function, for complex filtering rules (and to set properties at a finer-grained level, on individual files), see "Filtering"                            |
 
-**Type**
+### Type
 
 A source set has a type.  It can be either `plain` (the default) or `rest-src`.
 
@@ -70,7 +83,7 @@ A source set has a type.  It can be either `plain` (the default) or `rest-src`.
 These are the only types of source sets for now, but no doubt more will be added
 in the future.
 
-**Target**
+### Target
 
 During a data load or a code deployment, when no explicit source set is given,
 there are rules to try and pick the right one, as well as the right target
@@ -119,7 +132,13 @@ directory to use.  The most obvious example is that you do not want your text
 editor backup files (with names like "`module.xqy~`" or "`#lib.sjs`") to be
 deployed with the rest of your code.
 
-There are 3 properties involved in source set file filtering.
+### Properties
+
+There are 3 properties involved in source set file filtering:
+
+- `garbage`
+- `include`
+- `exclude`
 
 First, everything matching `garbage` is discarded.  Typically, it is set once on
 the `@default`, and matches files that should never be taken into account, like
@@ -132,9 +151,94 @@ account.  If `include` is not set, all files still here pass this stage.
 The last step is to discard files matching `exclude`.  If `exclude` is not set,
 no file is discarded during this stage.
 
-**TODO**: Document the ablity to set a filter function on a source set, in order
-to implement more complex filtering rules than those possible with `garbage`,
-`include` and `exclude`.
+Whilst `include` and `exclude` are specific to your project, `garbage` is more
+related to your work environment (OS, text editor, etc.)  The former is
+typically checked in the code revision tools (like Git).  For the latter, if you
+have alot of developers working on different environments and setups, you might
+want to keep it in an environment file not checked-in, but it is usually easier
+to maintain a global list with all patterns to ignore.
+
+### Function filter
+
+A custom filter can also be given as a function.  The purpose is double:
+
+- implement more complex filtering rules, with all the power of JavaScript
+- set properties at a finer-grained level, with different values for different
+  individual files
+
+The function takes as parameter a document descriptor, and return either a
+document descriptor itself, or nothing (or `undefined` or `null`).  The
+descriptor passed as a parameter contains all values the document would take
+without a filter function.  The returned descriptor has the same structure,
+possibly altered with different values.  If no descriptor is returned, it means
+the document has to be filtered out (not loaded or deployed on MarkLogic).
+
+Note that if there is a function filter, it is not called for files matching the
+property `garbage` (if any), but it is called in all other cases (including for
+files matching `exclude`).  It is possible to use `include` and `exclude`
+jointly with `filter`, but then you need to ensure you use `desc.isIncluded` and
+`desc.isExcluded` accordingly.  The following corresponds to a function filter
+implementing the default behaviour:
+
+    sources: [{
+        name:    'foo',
+        dir:     'foo/bar',
+        include: '*.xqy',
+        filter: function(desc) {
+            if ( desc.isIncluded && ! desc.isExcluded ) {
+                return desc;
+            }
+        }
+    }]
+
+The power of function filters comes from the fact that you can change that test
+with arbitrarily complex rule, and/or that you can alter `desc` with different
+values (or even create it from sratch all together if necessary).
+
+The `desc` parameter/return value looks like the following:
+
+    { base:       '/tmp/projects/simple-chimay/src',
+      full:       '/tmp/projects/simple-chimay/src/lib/tools.xqy',
+      path:       '/lib/tools.xqy',
+      name:       'tools.xqy',
+      isdir:      false,
+      isIncluded: true,
+      isExcluded: false,
+      include:    [ '*.xqy' ],
+      exclude:    [] }
+
+It contains several values about the current file being filtered, as well as
+values computed from the filtering properties, and properties coming from the
+source set:
+
+| Property  | Description                                                                           |
+|-----------|---------------------------------------------------------------------------------------|
+| `base`    | the root dir of the source set                                                        |
+| `full`    | the full path to the file                                                             |
+| `path`    | the path to the file, within the source set dir, will become the URI if not overriden |
+| `name`    | the root dir of the source set                                                        |
+| `isdir`   | the root dir of the source set                                                        |
+| `isIncluded`, `isExcluded` | the result of applying filtering properties to the file              |
+| `include`, `exclude`       | the `include` and `exclude` patterns, from the resolved environment  |
+
+There might be extra properties for internal usage (you can use them at your own
+risk).  Other properties might also be added as new features are added to the
+source sets.
+
+The object returned by the function filter has the same format, with possible 2
+excpetions:
+
+- the URI of the document to load/deploy is taken from `uri` if it exists (or
+  defaulted from `path`)
+- if there is no `full` property, it is computed by resolving `path` against the
+  root source set dir (the root dir is always used, it is not possible to
+  override `base` here)
+
+The minimal valid return value is then an object containing only the property
+`path`, which will be used as the URI as well as the path to the file within the
+source set dir:
+
+    { path: '/lib/tools.xqy' }
 
 ## REST sources
 
