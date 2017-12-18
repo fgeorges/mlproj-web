@@ -50,25 +50,35 @@ necessarily the same, even if it is in this case.
 But source sets can contain more properties:
 
     {
-        "name":    "src",
-        "dir":     "src",
-        "type":    "plain",
-        "garbage": [ ".*", "*~", "#*" ],
-        "include": [ "*.xqy", "*.sjs" ],
-        "exclude": [ "README.md", ".gitignore" ],
-        "target":  "modules",
+        "name":        "src",
+        "dir":         "src",
+        "type":        "plain",
+        "garbage":     [ ".*", "*~", "#*" ],
+        "include":     [ "*.xqy", "*.sjs" ],
+        "exclude":     [ "README.md", ".gitignore" ],
+        "target":      "modules",
+        "collections": [ "/colls/foo/bar" ]
     }
 
 ### List
 
-| Property  | Description                                                                                                                                   |
-|-----------|-----------------------------------------------------------------------------------------------------------------------------------------------|
-| `name`    | the name of the source set, it must be unique in the environment                                                                              |
-| `dir`     | the directory attached to the source set, if relative it is resolved,relatively to the project directory (the one containing `xproject/`)     |
-| `type`    | the type of the source set, either `plain` (the default) or,`rest-src`, see below                                                             |
-| `target`  | the default target database for this source set, see below                                                                                    |
+| Property      | Description                                                                                                                               |
+|---------------|-------------------------------------------------------------------------------------------------------------------------------------------|
+| `name`        | the name of the source set, it must be unique in the environment                                                                          |
+| `dir`         | the directory attached to the source set, if relative it is resolved,relatively to the project directory (the one containing `xproject/`) |
+| `type`        | the type of the source set, either `plain` (the default) or,`rest-src`, see below                                                         |
+| `target`      | the default target database for this source set, see below                                                                                |
 | `garbage`, `include`, `exclude` | collectively, they filter which files to, take into account in the directory (and all its descendents), see "Filtering" |
-| `filter`  | a function, for complex filtering rules (and to set properties at a finer-grained level, on individual files), see "Filtering"                            |
+| `collections` | the collections to add the documents to                                                                                                   |
+| `filter`      | a function, for complex filtering rules (and to set properties at a finer-grained level, on individual files), see "Filtering"            |
+
+The properties `garbage`, `include`, `exclude`, and `collections` are arrays of
+strings.  They can be set either as such, or as a simple string, which is then a
+comma-separated list of strings.  The following properties are therefore the
+same (the latter is transformed internally to the former):
+
+    "exclude": [ "README.md", ".gitignore" ]
+    "exclude": "README.md, .gitignore"
 
 ### Type
 
@@ -197,29 +207,31 @@ values (or even create it from sratch all together if necessary).
 
 The `desc` parameter/return value looks like the following:
 
-    { base:       '/tmp/projects/simple-chimay/src',
-      full:       '/tmp/projects/simple-chimay/src/lib/tools.xqy',
-      path:       '/lib/tools.xqy',
-      name:       'tools.xqy',
-      isdir:      false,
-      isIncluded: true,
-      isExcluded: false,
-      include:    [ '*.xqy' ],
-      exclude:    [] }
+    { base:        '/tmp/projects/simple-chimay/src',
+      full:        '/tmp/projects/simple-chimay/src/lib/tools.xqy',
+      path:        '/lib/tools.xqy',
+      name:        'tools.xqy',
+      isdir:       false,
+      isIncluded:  true,
+      isExcluded:  false,
+      include:     [ '*.xqy' ],
+      exclude:     [],
+      collections: [ '/colls/foo/bar' ] }
 
 It contains several values about the current file being filtered, as well as
 values computed from the filtering properties, and properties coming from the
 source set:
 
-| Property  | Description                                                                           |
-|-----------|---------------------------------------------------------------------------------------|
-| `base`    | the root dir of the source set                                                        |
-| `full`    | the full path to the file                                                             |
-| `path`    | the path to the file, within the source set dir, will become the URI if not overriden |
-| `name`    | the root dir of the source set                                                        |
-| `isdir`   | the root dir of the source set                                                        |
-| `isIncluded`, `isExcluded` | the result of applying filtering properties to the file              |
-| `include`, `exclude`       | the `include` and `exclude` patterns, from the resolved environment  |
+| Property      | Description                                                                           |
+|---------------|---------------------------------------------------------------------------------------|
+| `base`        | the root dir of the source set                                                        |
+| `full`        | the full path to the file                                                             |
+| `path`        | the path to the file, within the source set dir, will become the URI if not overriden |
+| `name`        | the root dir of the source set                                                        |
+| `isdir`       | the root dir of the source set                                                        |
+| `collections` | the collections to add documents to                                                   |
+| `isIncluded`, `isExcluded` | the result of applying filtering properties to the file                  |
+| `include`, `exclude`       | the `include` and `exclude` patterns, from the resolved environment      |
 
 There might be extra properties for internal usage (you can use them at your own
 risk).  Other properties might also be added as new features are added to the
@@ -239,6 +251,12 @@ The minimal valid return value is then an object containing only the property
 source set dir:
 
     { path: '/lib/tools.xqy' }
+
+The collections are always passed as an array of strings.  The array is empty if
+there is no collection set on the source set.  If the property is untouched, or
+is not set in the return value (`undefined` or `null`), then the default values
+from the source set are used.  If it is set, it must be an array of strings, and
+it overrides the default values from the source set.
 
 ## REST sources
 
