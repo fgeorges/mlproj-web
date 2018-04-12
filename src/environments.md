@@ -16,7 +16,7 @@ sections:
 You can find examples of environment files in
 [`test/environs/`](http://github.com/fgeorges/mlproj/tree/master/test/environs)
 (individual sets of environment files) and
-[`test/projects`/](http://github.com/fgeorges/mlproj/tree/master/test/projects)
+[`test/projects/`](http://github.com/fgeorges/mlproj/tree/master/test/projects)
 (more complete projects, including environment files.)
 
 > This is not covering all aspects and all possible properties of databases,

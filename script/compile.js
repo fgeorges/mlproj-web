@@ -1,6 +1,7 @@
 #!/usr/bin/node
 
 const fs     = require('fs');
+const path   = require('path');
 const marked = require('marked');
 
 const navbar = [
@@ -108,49 +109,63 @@ function navitems(root, menu, name, parent) {
     return res;
 }
 
-function emptySidebar() {
-    return '\
-        <div  class="col-sm-2  col-md-2"></div>\n\
-        <main class="col-sm-10 col-md-19" role="main">\n\n';
+function noMenuBefore() {
+    return `
+        <div  class="col-sm-2 col-md-1  col-lg-2 col-xl-3"></div>\n
+        <main class="col-12   col-md-11 col-lg-9 col-xl-8" role="main">\n\n`;
 }
 
-function menuSidebar(root, name) {
-    return '\
-        <nav class="col-sm-3 col-md-3 d-none d-sm-block sidebar">\n\
-          <ul class="nav flex-column">\n'
+function noMenuAfter() {
+    return `
+        </main>\n
+        <div class="col-lg-1"/>\n\n`;
+}
+
+function menuBefore(root, name) {
+    return `
+        <nav class="col-sm-3 d-none d-sm-block sidebar">\n
+          <ul class="nav flex-column">\n`
         // TODO: Does not handle sub-items yet...
 	+ navitems(root, menu, name)
-	+ '\
-          </ul>\n\
-        </nav>\n\n\
-        <main class="col-sm-9 ml-sm-auto col-md-9 pt-3" role="main">\n\n';
+	+ `
+          </ul>\n
+        </nav>\n\n
+        <main class="col-12 col-sm-9 col-xl-8 ml-sm-auto pt-3" role="main">\n\n`;
+}
+
+function menuAfter() {
+    return `
+        </main>\n
+        <div class="col-xl-1"/>\n\n`;
 }
 
 function compile(path, href, title, menu) {
     console.log('Compiling %s', path);
-    const infile  = path + '.md';
-    const md      = marked(read(infile));
-    const root    = href.includes('/') ? '..' : '.';
-    const sidebar = menu ? menuSidebar(root, path) : emptySidebar();
-    const nav     = navitems(root, navbar, menu ? 'doc' : path);
-    const html    = template
+    const infile = path + '.md';
+    const md     = marked(read(infile));
+    const root   = href.includes('/') ? '..' : '.';
+    const before = menu ? menuBefore(root, path) : noMenuBefore();
+    const after  = menu ? menuAfter(root, path)  : noMenuAfter();
+    const nav    = navitems(root, navbar, menu ? 'doc' : path);
+    const html   = template
 	  .replace(/__ROOT__/g,    root)
 	  .replace('__TITLE__',    title)
 	  .replace('__NAVITEMS__', nav)
-	  .replace('__CONTENT__',  sidebar + md);
+	  .replace('__CONTENT__',  before + md + after);
     const outfile = href.endsWith('/')
 	  ? href + 'index.html'
 	  : href + '.html';
     write(html, outfile);
 }
 
-function read(path) {
+function read(file) {
     try {
-	return fs.readFileSync('../src/' + path, 'utf8');
+	const absolute = path.resolve(__dirname, '../src/', file);
+	return fs.readFileSync(absolute, 'utf8');
     }
     catch ( err ) {
 	if ( err.code == 'ENOENT' ) {
-            process.stderr.write('Input file does not exist: ' + path + '\n');
+            process.stderr.write('Input file does not exist: ' + file + '\n');
             process.exit(1);
 	}
 	else {
@@ -159,25 +174,26 @@ function read(path) {
     }
 }
 
-function write(content, path) {
-    return fs.writeFileSync('../build/' + path, content);
+function write(content, file) {
+    const absolute = path.resolve(__dirname, '../build/', file);
+    return fs.writeFileSync(absolute, content);
 }
 
-function copyFile(path, dest) {
-    let src = path;
+function copyFile(file, dest) {
+    let src = file;
     if ( ! dest ) {
-	console.log('Copying ' + path);
-	src  = '../src/'   + path;
-	dest = '../build/' + path;
+	console.log('Copying ' + file);
+	src  = path.resolve(__dirname, '../src/',   file);
+	dest = path.resolve(__dirname, '../build/', file);
     }
     fs.createReadStream(src)
 	.pipe(fs.createWriteStream(dest));
 }
 
-function copyDir(path) {
-    console.log('Copying ' + path);
-    let src  = '../src/'   + path;
-    let dest = '../build/' + path;
+function copyDir(file) {
+    console.log('Copying ' + file);
+    let src  = path.resolve(__dirname, '../src/',   file);
+    let dest = path.resolve(__dirname, '../build/', file);
     ensureDir(dest);
     fs.readdirSync(src).forEach(f => {
 	copyFile(src + '/' + f, dest + '/' + f);
@@ -201,7 +217,7 @@ if ( ! fs.existsSync('./compile.js') ) {
     process.exit(1);
 }
 
-ensureDir('../build');
+ensureDir(path.resolve(__dirname, '../build'));
 
 sitemap.forEach(entry => {
     if ( entry.copy && entry.file ) {
