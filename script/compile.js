@@ -31,7 +31,8 @@ const menu = [
     { name: 'servers',       href: 'servers',       title: 'App servers' },
     { name: 'sources',       href: 'sources',       title: 'Source sets' },
     { name: 'user-commands', href: 'user-commands', title: 'User commands' },
-    { name: 'config',        href: 'config',        title: 'Config' }
+    { name: 'config',        href: 'config',        title: 'Config' },
+    { name: 'properties',    href: 'properties',    title: 'Properties' }
 ];
 
 const sitemap = [
@@ -54,6 +55,7 @@ const sitemap = [
     { path: 'sources',          href: 'sources',          title: 'Source sets',    menu: menu },
     { path: 'user-commands',    href: 'user-commands',    title: 'User commands',  menu: menu },
     { path: 'config',           href: 'config',           title: 'Config',         menu: menu },
+    { path: 'properties',       href: 'properties',       title: 'Properties',     menu: menu },
     { path: 'contact',          href: 'contact',          title: 'Contact' },
     { copy: true,               file: '.htaccess'  },
     { copy: true,               file: 'index.html' },

@@ -16,9 +16,9 @@ The NPM package `marked` must have been installed in `script/` first.
 
 ## TODO
 
-- document source sets eveywhere (their own section, various commands, etc.)
+- document source sets everywhere (their own section, various commands, etc.)
 - document the `apis` property in environ files
-- document the way to combine envron names with `/`
+- document the way to combine environ names with `/`
 - generate the table in `src/properties.md` (at very least adapt the script
   `dev/extract-props.js` so it outputs Markdown to be copied and pasted
   manually)
