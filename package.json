@@ -1,0 +1,28 @@
+{
+  "name": "mlproj-web",
+  "version": "0.1.0",
+  "description": "Website related resources for mlproj",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fgeorges/mlproj-web.git"
+  },
+  "keywords": [
+    "mlproj",
+    "marklogic",
+    "nosql",
+    "website"
+  ],
+  "author": "Florent Georges",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fgeorges/mlproj-web/issues"
+  },
+  "homepage": "https://github.com/fgeorges/mlproj-web#readme",
+  "dependencies": {
+    "marked": "^0.4.0",
+    "request": "^2.87.0"
+  }
+}
