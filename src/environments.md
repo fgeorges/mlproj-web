@@ -13,6 +13,8 @@ sections:
 - [MIME types](#mime-types)
 - [User commands](#user-commands)
 
+**TODO**: Document users and roles...
+
 You can find examples of environment files in
 [`test/environs/`](http://github.com/fgeorges/mlproj/tree/master/test/environs)
 (individual sets of environment files) and
