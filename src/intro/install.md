@@ -25,3 +25,6 @@ for NPM in general.
 [This ticket](https://github.com/fgeorges/mlproj/issues/10) also contains more
 info and pointers about this very issue, as well as a workaround.  But I would
 rather use the first solution above as a way to fix your NPM setup for good.
+
+If you want to read more about this problem, you can also have a look at [this
+issue](https://github.com/nodejs/node-gyp/issues/454#issuecomment-315691803).
