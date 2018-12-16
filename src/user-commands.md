@@ -42,7 +42,7 @@ Feel free to inspect the objects or read the sources for details, respectively:
 Let us start with an example.  Create a new environment file with the following
 content, named `xproject/mlenvs/mine.js`:
 
-    module.exports = function() {
+    module.exports = () => {
         return {
             mlproj: {
                 format: '0.1',

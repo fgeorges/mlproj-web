@@ -59,7 +59,7 @@ and must return an environment object, like if it was JSON.  The following is an
 example of an environment file written as JavaScript, simply importing another
 environment in `base.json`:
 
-    module.exports = function() {
+    module.exports = () => {
         return {
             "mlproj": {
                 "format": "0.1",
