@@ -1,8 +1,8 @@
 #!/bin/sh
 
-if [ ! -d build -o ! -d dev -o ! -d script -o ! -d src ]; then
-    echo "ERROR: This script must be invoked from mlproj-web root dir."
+if [ ! -f compile.js -o ! -d node_modules -o ! -d ../src -o ! -d ../build ]; then
+    echo "ERROR: This script must be invoked from its own dir (like compile.js)"
     exit 1;
 fi
 
-scp -rp build/* servlex@mlproj.org:/var/www/mlproj/htdocs
+scp -rp ../build/* servlex@mlproj.org:/var/www/mlproj/htdocs
