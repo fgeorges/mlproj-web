@@ -11,6 +11,7 @@ How to organize your source code.  This chapter contains the following:
   - [Properties](#properties)
   - [Function filter](#function-filter)
 - [REST sources](#rest-sources)
+- [TDE sources](#tde-sources)
 
 Source sets represent and configure the files on your project.  Your code
 (XQuery, JavaScript, schemas...) as well as your data to be loaded in databases.
@@ -66,7 +67,7 @@ But source sets can contain more properties:
 |---------------|-------------------------------------------------------------------------------------------------------------------------------------------|
 | `name`        | the name of the source set, it must be unique in the environment                                                                          |
 | `dir`         | the directory attached to the source set, if relative it is resolved,relatively to the project directory (the one containing `xproject/`) |
-| `type`        | the type of the source set, either `plain` (the default) or,`rest-src`, see below                                                         |
+| `type`        | the type of the source set, either `plain` (the default), `rest-src` or `tde`, see below                                                  |
 | `target`      | the default target database for this source set, see below                                                                                |
 | `garbage`, `include`, `exclude` | collectively, they filter which files to, take into account in the directory (and all its descendents), see "Filtering" |
 | `collections` | the collections to add the documents to                                                                                                   |
@@ -82,13 +83,18 @@ same (the latter is transformed internally to the former):
 
 ### Type
 
-A source set has a type.  It can be either `plain` (the default) or `rest-src`.
+A source set has a type.  It can be either `plain` (the default), `rest-src` or
+`tde`.
 
 - `plain` - the content of the source set is simply loaded to a database as is.
   No transformation, no specific meaning for specific files or subdirs, the
   whole directory and all its descendents are loaded to the target database.
-- `rest-src` - the content is interpreted (and installed) differently.  See the
-  section on [REST sources](#rest-sources) below for details.
+- `rest-src` - the content is interpreted as REST services (and installed
+  differently).  See the section on [REST sources](#rest-sources) below for
+  details.
+- `tde` - the content is interpreted as TDE template (and installed
+  differently).  See the section on [TDE sources](#tde-sources) below for
+  details.
 
 These are the only types of source sets for now, but no doubt more will be added
 in the future.
@@ -280,3 +286,12 @@ transforms are installed).
 The name of the extension or transform is the name of the file (minus the `.xqy`
 or `.sjs` extension).  Obviously, files named `*.xqy` result in installing an
 XQuery extension or transform, and `*.sjs` is used for JavaScript.
+
+## TDE sources
+
+A TDE source set can contain any file, but `*.xml` and `*.json` must be TDE
+templates (see the MarkLogic documentation for details).  When loading a TDE
+source set, the templates are installed on the given database (as a content
+database, so are actually installed on its associated schema database).
+
+All other files than `*.xml` and `*.json` are ignored.
