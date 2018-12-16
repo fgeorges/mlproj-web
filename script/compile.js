@@ -30,6 +30,7 @@ const menu = [
     { name: 'databases',     href: 'databases',     title: 'Databases' },
     { name: 'servers',       href: 'servers',       title: 'App servers' },
     { name: 'sources',       href: 'sources',       title: 'Source sets' },
+    { name: 'tests',         href: 'tests',         title: 'Tests' },
     { name: 'user-commands', href: 'user-commands', title: 'User commands' },
     { name: 'config',        href: 'config',        title: 'Config' },
     { name: 'properties',    href: 'properties',    title: 'Properties' }
@@ -53,6 +54,7 @@ const sitemap = [
     { path: 'databases',        href: 'databases',        title: 'Databases',      menu: menu },
     { path: 'servers',          href: 'servers',          title: 'App servers',    menu: menu },
     { path: 'sources',          href: 'sources',          title: 'Source sets',    menu: menu },
+    { path: 'tests',            href: 'tests',            title: 'Tests',          menu: menu },
     { path: 'user-commands',    href: 'user-commands',    title: 'User commands',  menu: menu },
     { path: 'config',           href: 'config',           title: 'Config',         menu: menu },
     { path: 'properties',       href: 'properties',       title: 'Properties',     menu: menu },
@@ -215,6 +217,7 @@ if ( process.argv.length !== 2 ) {
 
 if ( ! fs.existsSync('./compile.js') ) {
     console.log('Does not seem to be in the right directory.');
+    // TODO: Use __dirname instead...
     console.log('You MUST invoke this script from its own dir: mlproj-web/scripts/.');
     process.exit(1);
 }
