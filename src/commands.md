@@ -9,13 +9,13 @@ a new project interactively.
 
 The available comamnds are:
 
-- [`help`](#help) - display help about another command
-- [`new`](#new) - create a new project in an empty dir
-- [`show`](#show) - display the environment
-- [`setup`](#setup) - setup the environment on MarkLogic
-- [`load`](#load) - load documents to the content database
-- [`deploy`](#deploy) - deploy modules to the modules database
-- [`watch`](#watch) - deploy modules as soon as modified
+- [`help`](help) - display help about another command
+- [`new`](new) - create a new project in an empty dir
+- [`show`](show) - display the environment
+- [`setup`](setup) - setup the environment on MarkLogic
+- [`load`](load) - load documents to the content database
+- [`deploy`](deploy) - deploy modules to the modules database
+- [`watch`](watch) - deploy modules as soon as modified
 
 Each command can get parameters and options, after its name.  Before its name,
 there can also be some *global options*.  In the following invocation, `-e` is a
