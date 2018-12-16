@@ -33,6 +33,7 @@ const menu = [
     { name: 'tests',         href: 'tests',         title: 'Tests' },
     { name: 'user-commands', href: 'user-commands', title: 'User commands' },
     { name: 'config',        href: 'config',        title: 'Config' },
+    { name: 'development',   href: 'development',   title: 'Development' },
     { name: 'properties',    href: 'properties',    title: 'Properties' }
 ];
 
@@ -57,6 +58,7 @@ const sitemap = [
     { path: 'tests',            href: 'tests',            title: 'Tests',          menu: menu },
     { path: 'user-commands',    href: 'user-commands',    title: 'User commands',  menu: menu },
     { path: 'config',           href: 'config',           title: 'Config',         menu: menu },
+    { path: 'development',      href: 'development',      title: 'Development',    menu: menu },
     { path: 'properties',       href: 'properties',       title: 'Properties',     menu: menu },
     { path: 'contact',          href: 'contact',          title: 'Contact' },
     { copy: true,               file: '.htaccess'  },
