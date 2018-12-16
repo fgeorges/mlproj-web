@@ -232,6 +232,20 @@ Sends a POST request using the given parameters and payload.
 
 Sends a PUT request using the given parameters and payload.
 
+    apis.eval(params, options)
+
+Evaluates a piece of JavaScript or XQuery on the server.
+
+The argument `options` is an object with exactly one of the properties
+`javascript` or `xquery` (both strings), and optionally the property `vars`
+(which is itself an object, representing a set of key/value pairs, passed as
+parameters to the evaluated code).
+
+The argument `options` may also contain the property `database`, which is then
+the name of the content database to evaluate the code against.  In order to use
+IDs from the environ files, instead of hard-coding it, the name can be retrieve
+using e.g. `env.database('content').name`.
+
 **Source sets**
 
 The `Apis` object gives you access to the source sets.
@@ -273,10 +287,68 @@ payload.
 Return the list of databases on the cluster, as an array of strings (the names
 of the databases).
 
+    manage.database(name)
+
+Return an object to access the Management API for the given database.  `name` is
+the name of the database.
+
+    manage.forests()
+
+Return the list of forests on the cluster, as an array of strings (the names of
+the forests).
+
+    manage.forest(name)
+
+Return an object to access the Management API for the given forest.  `name` is
+the name of the forest.
+
+    manage.servers()
+
+Return the list of servers on the cluster, as an array of strings (the names of
+the servers).
+
     manage.server(name, group)
 
 Return an object to access the Management API for the given app server.  `name`
 is the name of the app server, `group` is its group (defaults to `Default`).
+
+**Management - Database**
+
+The function `manage.database()` return an object to access the Management API
+for a specific database.  This object gives you access to the following
+functions.
+
+    database.get(params)
+
+Sends a GET request to the database endpoint of the Management API using the
+given parameters.
+
+    database.post(params, body, type)
+
+Sends a POST request to the database endpoint of the Management API using the
+given parameters and payload.
+
+    database.put(params, body, type)
+
+Sends a PUT request to the database endpoint of the Management API using the
+given parameters and payload.
+
+    database.properties()
+
+Return the properties of the database.
+
+    database.properties(props)
+
+Set the properties of the database.
+
+    database.forests()
+
+Return the name of the forests attached to the database, as an array of strings.
+
+**Management - Server**
+
+The function `manage.server()` return an object to access the Management API for
+a specific app server.  This object gives you access to the following functions.
 
     server.get(params, url)
 
