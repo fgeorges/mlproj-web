@@ -1,5 +1,7 @@
 # Config
 
+TODO: DOCUMENT HTTP TRACE...
+
 The `mlproj` command itself can be configured in various ways.  It looks in a
 few different config files, so you can maintain some pieces of configuration
 where it makes more sense (at the global level, in a specific project, or even

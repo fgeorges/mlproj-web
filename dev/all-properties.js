@@ -39,6 +39,13 @@
 // - namespaces
 // - request-blackouts
 // - schemas
+//
+// -> Is it possible it is because they are arrays, and empty?  So they are not
+//    included in the JSON output, but the parent element remains in the XML
+//    output?  CHECK BEFORE SENDING...!
+//
+// -> If it is, how to get a complete list from the API itself? (so we can make
+//    sure to retrieve exact lists, even with different versions)
 
 
 "use strict";

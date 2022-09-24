@@ -28,3 +28,6 @@ rather use the first solution above as a way to fix your NPM setup for good.
 
 If you want to read more about this problem, you can also have a look at [this
 issue](https://github.com/nodejs/node-gyp/issues/454#issuecomment-315691803).
+
+**TODO**: Is not the above out of date?  I think this is not applicable since we
+got rid of the watching lib dependent on Gyp...???

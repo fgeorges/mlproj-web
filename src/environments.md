@@ -28,6 +28,8 @@ You can find examples of environment files in
 > the top of the list.  Look at the <a href="properties">property</a> list, with
 > a detailed support status.
 
+**TODO**: The link <a href="properties">property</a> just above is broken...
+
 ## Introduction
 
 The environment files describe the details of a MarkLogic environment.  They

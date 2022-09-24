@@ -96,6 +96,9 @@ databases (e.g. from a server, to be its modules database).
 
 ### Forests
 
+**TODO**: Document the new forests...  Either a number or an array of explicit
+forest objects (name, host, etc.)
+
 The property `forests` defines the forests attached to the database.  It can be
 a number of forests, or the explicit list of all forest names.
 
