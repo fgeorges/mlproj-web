@@ -46,6 +46,7 @@ const sitemap = [
     { path: 'commands/options', href: 'commands/options', title: 'Global options', menu: menu },
     { path: 'commands/deploy',  href: 'commands/deploy',  title: 'deploy',         menu: menu },
     { path: 'commands/help',    href: 'commands/help',    title: 'help',           menu: menu },
+    { path: 'commands/init',    href: 'commands/init',    title: 'init',           menu: menu },
     { path: 'commands/load',    href: 'commands/load',    title: 'load',           menu: menu },
     { path: 'commands/new',     href: 'commands/new',     title: 'new',            menu: menu },
     { path: 'commands/setup',   href: 'commands/setup',   title: 'setup',          menu: menu },
